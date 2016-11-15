@@ -1,0 +1,129 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: XTEC LDAP Login\n"
+"POT-Creation-Date: 2016-02-11 17:11+0100\n"
+"PO-Revision-Date: 2016-04-05 17:17+0100\n"
+"Last-Translator: Toni Ginard <toni.ginard@gmail.com>\n"
+"Language-Team: Àgora <agora@xtec.cat>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;gettext;gettext_noop;_e\n"
+"X-Poedit-Basepath: /home/aginard/mv2/agora/html/wordpress/wp-content/plugins/"
+"xtec-ldap-login/\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: xtec-ldap-login.php:34 xtec-ldap-login.php:41 xtec-ldap-login.php:339
+msgid "LDAP Login"
+msgstr "Validació LDAP"
+
+#: xtec-ldap-login.php:70
+msgid "Options saved."
+msgstr "S'han desat les opcions"
+
+#: xtec-ldap-login.php:77
+msgid "XTEC LDAP Login"
+msgstr "Validació amb l'LDAP de la XTEC"
+
+#: xtec-ldap-login.php:82
+msgid "LDAP Host"
+msgstr "Servidor LDAP"
+
+#: xtec-ldap-login.php:86
+msgid "LDAP Port"
+msgstr "Port LDAP"
+
+#: xtec-ldap-login.php:90
+msgid "LDAP Version"
+msgstr "Versió de l'LDAP"
+
+#: xtec-ldap-login.php:94
+msgid "Base DN"
+msgstr "Base DN"
+
+#: xtec-ldap-login.php:99
+msgid "Validation Type"
+msgstr "Tipus de validació"
+
+#: xtec-ldap-login.php:111
+msgid "LDAP"
+msgstr "LDAP"
+
+#: xtec-ldap-login.php:115
+msgid ""
+"The user is validated through the LDAP server. If the user enters for the "
+"first time and validates, the application registers it. First attempt to "
+"validate as user of LDAP server and then if fails attempt to validate as "
+"user of the application. <strong>IMPORTANT: When LDAP is on, any XTEC user "
+"can log in.</strong>"
+msgstr ""
+"Els usuaris es validen via LDAP. La primera vegada que entren, l'aplicació "
+"els afegeix a la taula d'usuaris del WordPress. En cas que falli la "
+"validació via LDAP, s'intenta fer-la localment contra la taula d'usuaris del "
+"WordPress. Cada vegada que un usuari entra, s'actualitza la contrasenya "
+"local. Si un usuari existent té una adreça XTEC, s'utilitza el nom d'usuari "
+"XTEC per fer la validació via LDAP. <strong>IMPORTANT: Quan la validació per "
+"LDAP està activada, qualsevol usuari XTEC pot entrar.</strong>"
+
+#: xtec-ldap-login.php:126
+msgid "Application Data Base"
+msgstr "Local"
+
+#: xtec-ldap-login.php:129
+msgid "The user is validated through Application Data Base"
+msgstr "Els usuaris ens validen contra la taula d'usuaris del WordPress"
+
+#: xtec-ldap-login.php:136
+msgid "Save"
+msgstr "Desa els canvis"
+
+#: xtec-ldap-login.php:164
+msgid "The username is empty."
+msgstr "El nom d'usuari està buit"
+
+#: xtec-ldap-login.php:167
+msgid "The password is empty."
+msgstr "La contrasenya està buida"
+
+#: xtec-ldap-login.php:189
+msgid "The password is not correct"
+msgstr "La contrasenya no és correcta"
+
+#: xtec-ldap-login.php:205
+msgid "Could not connect to LDAP server"
+msgstr "No s'ha pogut connectar al servidor LDAP"
+
+#: xtec-ldap-login.php:214
+msgid ""
+"Could not bind to the LDAP directory. The username, the password or both are "
+"not correct"
+msgstr ""
+"No s'ha pogut fer la validació. El nom d'usuari, la contrasenya o els dos "
+"són incorrectes"
+
+#: xtec-ldap-login.php:251
+msgid "Your account has been marked as a spammer"
+msgstr "El vostre compte ha estat marcat com a brossa"
+
+#: xtec-ldap-login.php:257
+msgid "Site Suspended"
+msgstr "El lloc web està suspès"
+
+#: xtec-ldap-login.php:286
+#, php-format
+msgid ""
+"The password you entered for the username <strong>%1$s</strong> is "
+"incorrect. <a href=\"%2$s\" title=\"Password Lost and Found\">Lost your "
+"password</a>?"
+msgstr ""
+"La contrasenya que heu introduït per al nom d'usuari <strong>%1$s</strong> "
+"no és correcta. <a href=\"%2$s\" title=\"Recuperació de la contrasenya\">Heu "
+"perdut la contrasenya</a>?"
+
+#: xtec-ldap-login.php:346
+msgid "Login via LDAP is activated"
+msgstr "La validació via LDAP està activada"

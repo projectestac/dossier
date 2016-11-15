@@ -1,0 +1,292 @@
+# Translation of Stable (latest release) in Catalan
+# This file is distributed under the same license as the Stable (latest release) package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Stable (latest release)\n"
+"POT-Creation-Date: 2015-09-15 10:42-0800\n"
+"PO-Revision-Date: 2015-11-25 10:53+0100\n"
+"Last-Translator: Mònica Grau <mgrau226@xtec.cat>\n"
+"Language-Team: \n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.7.5\n"
+
+#: ../tadv_admin.php:125
+msgid "Default settings restored."
+msgstr "S'ha restaurat la configuració per defecte."
+
+#: ../tadv_admin.php:137
+msgid "TinyMCE Advanced Settings Export"
+msgstr "Configuració avançada d'exportació del TinyMCE"
+
+#: ../tadv_admin.php:141
+msgid "The settings are exported as a JSON encoded string."
+msgstr "Els ajustos s'exporten com una cadena JSON codificada."
+
+#: ../tadv_admin.php:142
+msgid ""
+"Please copy the content and save it in a <b>text</b> (.txt) file, using a plain text "
+"editor like Notepad."
+msgstr ""
+"Copieu el contingut i guardeu-lo en un fitxer <b>text</ b> (.TXT), utilitzant un "
+"editor de text pla com el Bloc de notes."
+
+#: ../tadv_admin.php:143
+msgid ""
+"It is important that the export is not changed in any way, no spaces, line breaks, etc."
+msgstr ""
+"És important que l'exportació no es canviï de cap manera, sense espais, salts de "
+"línia, etc."
+
+#: ../tadv_admin.php:148
+msgid "Select All"
+msgstr "Selecciona-ho tot"
+
+#: ../tadv_admin.php:150 ../tadv_admin.php:176
+msgid "Back to Editor Settings"
+msgstr "Torna a la configuració de l'editor"
+
+#: ../tadv_admin.php:162
+msgid "TinyMCE Advanced Settings Import"
+msgstr "Configuració avançada d'importació del TinyMCE"
+
+#: ../tadv_admin.php:165
+msgid ""
+"The settings are imported from a JSON encoded string. Please paste the exported string "
+"in the text area below."
+msgstr ""
+"La configuració s'importa d'una cadena JSON codificada. Enganxeu la cadena exportada a "
+"l'àrea de text de sota."
+
+#: ../tadv_admin.php:170
+msgid "Verify"
+msgstr "Verifica"
+
+#: ../tadv_admin.php:171
+msgid "Import"
+msgstr "Importa"
+
+#: ../tadv_admin.php:201
+msgid "Importing of settings failed."
+msgstr "La importació de la configuració ha fallat."
+
+#: ../tadv_admin.php:227
+msgid "ERROR: All toolbars are empty. Default settings loaded."
+msgstr ""
+"ERROR: Totes les barres d'eines estan buides. S'ha carregat la configuració per "
+"defecte."
+
+#: ../tadv_admin.php:239
+msgid "Editor Settings"
+msgstr "Configuració de l'editor"
+
+#: ../tadv_admin.php:246
+msgid "Settings saved."
+msgstr "S'ha desat la configuració."
+
+#: ../tadv_admin.php:255 ../tadv_admin.php:509
+msgid "Save Changes"
+msgstr "Desa els canvis"
+
+#: ../tadv_admin.php:260
+msgid ""
+"New in TinyMCE 4.0/WordPress 3.9 is the editor menu. When it is enabled, most buttons "
+"are also available as menu items."
+msgstr ""
+"El menú de l'editor és nou a TinyMCE 4.0/WordPress 3.9. Quan està actiu, la majoria "
+"dels botons també estan disponibles com a opcions de menú."
+
+#: ../tadv_admin.php:264
+msgid "Enable the editor menu."
+msgstr "Activa el menú de l'editor."
+
+#: ../tadv_admin.php:376
+msgid ""
+"Drag buttons from the unused buttons below and drop them in the toolbars above, or "
+"drag the buttons in the toolbars to rearrange them."
+msgstr ""
+"Arrossegueu els botons no utilitzats i deixeu-los caure sobre les barres d'eines de "
+"dalt, o arrossegueu els botons de les barres d'eines, per reorganitzar-los."
+
+#: ../tadv_admin.php:379
+msgid "Unused Buttons"
+msgstr "Botons que no s'utilitzen"
+
+#: ../tadv_admin.php:420
+msgid "Also enable:"
+msgstr "Habilita també:"
+
+#: ../tadv_admin.php:423
+msgid "List Style Options"
+msgstr "Opcions d'estil de llista"
+
+#: ../tadv_admin.php:428
+msgid "Context Menu"
+msgstr "Menú contextual"
+
+#: ../tadv_admin.php:433
+msgid "Link (replaces the Insert/Edit Link dialog)"
+msgstr "Enllaç (reemplaça el quadre de diàleg Insereix/Edita un enllaç)"
+
+#: ../tadv_admin.php:443
+msgid "Advanced Options"
+msgstr "Opcions avançades"
+
+#: ../tadv_admin.php:451
+msgid "Import editor-style.css."
+msgstr "Importa el fitxer editor-style.css."
+
+#: ../tadv_admin.php:453
+msgid "It seems your theme does not support customised styles for the editor."
+msgstr "Sembla que el vostre tema no admet estils personalitzats per a l'editor."
+
+#: ../tadv_admin.php:454
+msgid ""
+"You can create a CSS file named <code>editor-style.css</code> and upload it to your "
+"theme's directory."
+msgstr ""
+"Podeu crear un fitxer CSS anomenat <code>editor-style.css</code> i pujar-lo al "
+"directori del vostre tema."
+
+#: ../tadv_admin.php:455
+msgid "After that, enable this setting."
+msgstr "Després d'això, habilita aquest paràmetre."
+
+#: ../tadv_admin.php:464
+msgid ""
+"Load the CSS classes used in editor-style.css and replace the Formats button and sub-"
+"menu."
+msgstr ""
+"Carrega les classes CSS que es fan servir a editor-style.css i reeemplaça els botons "
+"Formats i submenú."
+
+#: ../tadv_admin.php:469
+msgid ""
+"Stop removing the &lt;p&gt; and &lt;br /&gt; tags when saving and show them in the "
+"Text editor"
+msgstr ""
+"Deixa d'eliminar les etiquetes &lt;p&gt; i &lt;br /&gt; en desar en l'editor d'HTML"
+
+#: ../tadv_admin.php:471
+msgid ""
+"This will make it possible to use more advanced coding in the HTML editor without the "
+"back-end filtering affecting it much."
+msgstr ""
+"Això farà que sigui possible l'ús d'una codificació més avançada en l'editor d'HTML "
+"sense el filtrat de fons que afecta molt."
+
+#: ../tadv_admin.php:472
+msgid ""
+"However it may behave unexpectedly in rare cases, so test it thoroughly before "
+"enabling it permanently."
+msgstr ""
+"Però, pot comportar problemes inesperats en alguns casos, per tant, cal provar-ho a "
+"fons abans d'habilitar-lo de forma permanent."
+
+#: ../tadv_admin.php:473
+msgid ""
+"Line breaks in the HTML editor would still affect the output, in particular do not use "
+"empty lines, line breaks inside HTML tags or multiple &lt;br /&gt; tags."
+msgstr ""
+"Els salts de línia dins de l'editor d'HTML afectaran a la visualització, en "
+"particular, no utilitzeu línies buides, salts de línia dins de les etiquetes HTML o "
+"etiquetes com &lt;br /&gt;."
+
+#: ../tadv_admin.php:479
+msgid "Replace font size settings"
+msgstr "Canvia la configuració de la mida de la font"
+
+#: ../tadv_admin.php:480
+msgid ""
+"Replaces the size setting available for fonts with: 8px 10px 12px 14px 16px 20px 24px "
+"28px 32px 36px."
+msgstr ""
+"Substitueix la configuració disponible per a fonts amb: 8px 10px 12px 14px 16px 20px "
+"24px 28px 32px 36px."
+
+#: ../tadv_admin.php:485
+msgid "Enable pasting of image source"
+msgstr "Habilita l'enganxament d'un recurs d'imatge"
+
+#: ../tadv_admin.php:487
+msgid ""
+"Works only in Firefox and Safari. These browsers support pasting of images directly in "
+"the editor and convert them to base64 encoded text."
+msgstr ""
+"Només funciona en Firefox i Safari. Aquests navegadors suporten l'enganxat d'imatges "
+"directament a l'editor i les converteix en text codificat en base64."
+
+#: ../tadv_admin.php:488
+msgid ""
+"This is not acceptable for larger images like photos or graphics, but may be useful in "
+"some cases for very small images like icons, not larger than 2-3KB."
+msgstr ""
+"Això no aplica a les imatges més grans com fotos o gràfics, però pot ser útil en "
+"alguns casos amb imatges molt petites com icones, no més grans que 2-3KB."
+
+#: ../tadv_admin.php:489
+msgid "These images will not be available in the Media Library."
+msgstr "Aquestes imatges no estaran disponibles a la Mediateca."
+
+#: ../tadv_admin.php:495
+msgid "Administration"
+msgstr "Administració"
+
+#: ../tadv_admin.php:497
+msgid "Export Settings"
+msgstr "Exporta la configuració"
+
+#: ../tadv_admin.php:498
+msgid "Import Settings"
+msgstr "Importa la configuració"
+
+#: ../tadv_admin.php:508
+msgid "Restore Default Settings"
+msgstr "Restaura la configuració per defecte"
+
+#: ../tadv_admin.php:514
+msgid ""
+"The [Toolbar toggle] button shows or hides the second, third, and forth button rows. "
+"It will only work when it is in the first row and there are buttons in the second row."
+msgstr ""
+"El botó [Commuta la barra d'eines] mostra o oculta la segona, tercera, i altres files "
+"de botons. Això només serà possible quan està a la primera fila i hi ha botons a la "
+"segona fila."
+
+#: ../tinymce-advanced.php:180
+#, php-format
+msgid ""
+"TinyMCE Advanced requires WordPress version %1$s or newer. It appears that you are "
+"running %2$s. This can make the editor unstable."
+msgstr ""
+"El TinyMCE Avançat necessita una versió de WordPress %1$s o superior. Sembla que "
+"vosaltres teniu %2$s. Això pot fer que l'editor editor sigui inestable."
+
+#: ../tinymce-advanced.php:187
+#, php-format
+msgid ""
+"Please upgrade your WordPress installation or download an <a href=\"%s\">older version "
+"of the plugin</a>."
+msgstr ""
+"Actualitzeu la vostra instal·lació de Wordpress o baixeu una <a href=\"%s\">versió més "
+"antiga de l'extensió</a>."
+
+#~ msgid "TinyMCE Advanced"
+#~ msgstr "TinyMCE Avançat"
+
+#~ msgid "http://www.laptoptips.ca/projects/tinymce-advanced/"
+#~ msgstr "http://www.laptoptips.ca/projects/tinymce-advanced/"
+
+#~ msgid ""
+#~ "Enables advanced features and plugins in TinyMCE, the visual editor in WordPress."
+#~ msgstr ""
+#~ "Permet funcions avançades i extensions a l'editor visual del TinyMCE a WordPress."
+
+#~ msgid "Andrew Ozz"
+#~ msgstr "Andrew Ozz"
+
+#~ msgid "http://www.laptoptips.ca/"
+#~ msgstr "http://www.laptoptips.ca/"
