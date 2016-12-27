@@ -46,7 +46,7 @@ add_action('do_meta_boxes', 'remove_page_meta_boxes');
 function set_order_meta_boxes($hidden, $screen) {
 	$post_type = $screen->post_type;
 	// So this can be used without hooking into user_register
-	if ( ! $user_id ) {
+	if ( ! isset($user_id) ) {
 		$user_id = get_current_user_id();
 	}
 
@@ -307,8 +307,8 @@ add_action('rss2_item', 'add_tags_rss');
  * Set number of posts per page for search and archive template
  * @author Xavier Meler (jmeler@xtec.cat)
  */
-function posts_per_page() {
-    if ( is_search() || is_archive() || is_author()){
+function posts_per_page ($query) {
+    if ( $query->is_search() || $query->is_archive() || $query->is_author()){
         set_query_var('posts_per_page', 10);
     }
 }
@@ -764,3 +764,16 @@ function add_flashvars_tinymc( $init ) {
     return $init;
 }
 add_filter('tiny_mce_before_init', 'add_flashvars_tinymc');
+
+/**
+ * Allow requests to some external hosts (like Gencat) to avoid problems with RSS (for instance)
+ *
+ * @author Sara Arjona Téllez
+ */
+function xtec_allowed_external_host( $allow, $host, $url ) {
+    if (strpos($host, '.gencat.cat') !== FALSE || strpos($host, '.xtec.cat') !== FALSE || strpos($host, '.edu365.cat') !== FALSE) {
+        $allow = true;
+    }
+    return $allow;
+}
+add_filter('http_request_host_is_external', 'xtec_allowed_external_host', 10, 3);
