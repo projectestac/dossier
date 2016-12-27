@@ -25,6 +25,11 @@ global $isAgora, $isBlocs;
 $isAgora = false;
 $isBlocs = true;
 
+/**
+ * DES, INT, ACC, PRO, FRM.
+ */
+define('ENVIRONMENT', 'DES');
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('DB_NAME', 'dossier_global');
@@ -86,11 +91,10 @@ $table_prefix  = 'wp_';
  */
 define('WP_DEBUG', true);
 
-/* That's all, stop editing! Happy blogging. */
-
-/** Absolute path to the WordPress directory. */
-if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
+/**
+ * Default blog creation theme.
+ */
+define('WP_DEFAULT_THEME', 'fukasawa');
 
 define('WP_ALLOW_MULTISITE', true);
 define('MULTISITE', true);
@@ -99,6 +103,12 @@ define('DOMAIN_CURRENT_SITE', 'agora');
 define('PATH_CURRENT_SITE', '/blocs/dossier/');
 define('SITE_ID_CURRENT_SITE', 1);
 define('BLOG_ID_CURRENT_SITE', 1);
+
+/* That's all, stop editing! Happy blogging. */
+
+/** Absolute path to the WordPress directory. */
+if ( !defined('ABSPATH') )
+	define('ABSPATH', dirname(__FILE__) . '/');
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');

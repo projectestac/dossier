@@ -18,6 +18,18 @@
  * @package WordPress
  */
 
+include_once dirname(__FILE__) . '/wp-includes/xtec/lib.php';
+
+global $isAgora, $isBlocs;
+
+$isAgora = false;
+$isBlocs = true;
+
+/**
+ * DES, INT, ACC, PRO, FRM.
+ */
+define('ENVIRONMENT', 'DES');
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('DB_NAME', 'dossier_global');
@@ -78,6 +90,11 @@ $table_prefix  = 'wp_';
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
 define('WP_DEBUG', true);
+
+/**
+ * Default blog creation theme.
+ */
+define('WP_DEFAULT_THEME', 'fukasawa');
 
 /* That's all, stop editing! Happy blogging. */
 
