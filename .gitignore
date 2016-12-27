@@ -1,0 +1,5 @@
+wp-config.php
+wp-content/wp-cache-config.php
+.htaccess
+wp-content/blogs.dir
+wp-content/cache
