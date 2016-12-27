@@ -32,6 +32,13 @@ function fukasawa_setup() {
 	// Title tag
 	add_theme_support('title-tag');
 	
+	// XTEC ************ AFEGIT - Allow custom background
+	// 2016.11.14 @xaviernietosanchez
+	add_theme_support( 'custom-background', array(
+		'default-color' => 'f2f2f2',
+	) );
+	// ************ FI
+	
 	// Add nav menu
 	register_nav_menu( 'primary', __('Primary Menu','fukasawa') );
 	

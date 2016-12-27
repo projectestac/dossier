@@ -2476,3 +2476,32 @@ img#wpstats { display: none; }
 	color: #666;
 }
 /*//************ FI */
+
+/*//XTEC ************ AFEGIT - Reviewed some styles for DOSSIER project
+//2016.11.14  @xaviernietosanchez */
+
+/* Change icon article link */
+.main-menu .current-menu-item:before, .main-menu .current_page_item:before {
+  content: '\f501';
+}
+
+/* Change color */
+.page-title h4 {
+   color: #FFF;
+}
+
+/* Hidden images (thumbnail, carrousel,...) into main page */
+.single .featured-media {
+    display: none;
+}
+
+/* Change color links in main-menu */
+.main-menu a {
+  color: #494949;
+}
+
+/* Hide posts with category "Pendent" */
+body.home div.category-pendents{
+	display:none;
+}
+/*//************ FI*/

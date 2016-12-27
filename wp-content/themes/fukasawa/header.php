@@ -108,6 +108,21 @@
 			 
 			 <div class="credits">
 			 
+			 	<!-- 
+			 	// XTEC ************ AFEGIT - Add link information at bottom "epa" blocs
+			 	// 2016.11.16 @xaviernietosanchez
+			 	-->
+			 	<?php if ( get_option('xtec_blogtype') == 'epa' ){ ?>
+			 	<p>
+			 		<span class="genericon genericon-info"></span> 
+			 		<a href="http://blocs.xtec.cat/blocs_formacio/dossierepa/sobre-aquest-espai">Sobre aquest espai</a>
+			 	</p>
+			 	<br><br>
+			 	<?php } ?>
+			 	<!--
+				// ************ FI
+			 	-->
+
 			 	<p>&copy; <?php echo date("Y") ?> <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo('name'); ?></a>.</p>
 			 	<p><?php _e('Powered by','fukasawa'); ?> <a href="http://www.wordpress.org">WordPress</a>.</p>
 			 	<p><?php _e('Theme by','fukasawa'); ?> <a href="http://www.andersnoren.se">Anders Nor&eacute;n</a>.</p>
