@@ -1,0 +1,3 @@
+[submodule "wp-content/themes/travelify"]
+	path = wp-content/themes/travelify
+	url = https://github.com/puikinsh/Travelify.git
