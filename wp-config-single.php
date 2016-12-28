@@ -20,6 +20,9 @@
 
 include_once dirname(__FILE__) . '/wp-includes/xtec/lib.php';
 
+/** Enable INSTALL without to comment patch */
+define('XTEC_ENABLE_INSTALL', true);
+
 global $isAgora, $isBlocs;
 
 $isAgora = false;
