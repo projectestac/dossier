@@ -10,8 +10,18 @@
 			
 			<h2 class="comments-title">
 			
-				<?php echo count($wp_query->comments_by_type[comment]) . ' ';
-				echo _n( 'Comment' , 'Comments' , count($wp_query->comments_by_type[comment]), 'fukasawa' ); ?>
+				<?php
+// XTEC ************ MODIFICAT - Avoid warning when debugging
+// 2016.12.28 @sarjona -->
+				echo count($wp_query->comments_by_type['comment']) . ' ';
+				echo _n( 'Comment' , 'Comments' , count($wp_query->comments_by_type['comment']), 'fukasawa' );
+//************ ORIGINAL
+/*
+				echo count($wp_query->comments_by_type[comment]) . ' ';
+				echo _n( 'Comment' , 'Comments' , count($wp_query->comments_by_type[comment]), 'fukasawa' );
+*/
+//************ FI
+ ?>
 				
 			</h2>
 		

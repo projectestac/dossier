@@ -42,7 +42,7 @@ define('DB_USER', 'root');
 define('DB_PASSWORD', 'agora');
 
 /** Databbase hostname */
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'localhost:3306');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -97,6 +97,8 @@ define('DB_NUMS',4); /** HyperDB additional databases */
  * in their development environments.
  */
 define('WP_DEBUG', false);
+define('XTEC_DEBUG_HYPERDB', false);
+define('XTEC_DEBUG_SHOW_ALL_MESSAGES', false);
 
 define('AUTOMATIC_UPDATER_DISABLED', true);
 

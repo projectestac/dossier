@@ -1404,7 +1404,14 @@ function ga_current_user_is($roles)
 	if ( !$roles ) return false;
 
 	global $current_user;
-	get_currentuserinfo();
+  // XTEC ************ MODIFICAT - Added to avoid some debug warnings
+  // 2016.12.28 @sarjona
+  $current_user = wp_get_current_user();
+  //************ ORIGINAL
+  /*
+  get_currentuserinfo();
+  */
+  //************ FI
 	$user_id = intval( $current_user->ID );
 
 	if ( !$user_id ) {

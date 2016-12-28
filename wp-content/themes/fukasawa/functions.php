@@ -487,4 +487,20 @@ add_action( 'wp_head' , array( 'fukasawa_Customize' , 'fukasawa_header_output' )
 // Enqueue live preview javascript in Theme Customizer admin screen
 add_action( 'customize_preview_init' , array( 'fukasawa_Customize' , 'fukasawa_live_preview' ) );
 
+// XTEC ************ AFEGIT - Change to dots "..." (<span class="genericon genericon-ellipsis"></span>) instead of category menu "pendents"
+// 2016.11.14 @xaviernietosanchez
+function filter_pre_wp_nav_menu( $sorted_menu_items, $args ) {
+	foreach ( $sorted_menu_items as $i => $sorted_menu_item ) {
+		if( strcasecmp ( $sorted_menu_item->title , 'pendents' ) == 0 ) {
+			$sorted_menu_items[$i]->title = '<span class="genericon genericon-ellipsis"></span>';
+		}
+	}
+    return $sorted_menu_items;
+}
+if ( get_option('xtec_blogtype') == 'epa' ){
+	add_filter( 'wp_nav_menu_objects', 'filter_pre_wp_nav_menu', 10, 2 );
+}
+// ************ FI
+
+
 ?>

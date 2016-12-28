@@ -28,10 +28,15 @@ class ReCAPTCHAPlugin extends WPPlugin
      *
      * @param string $options_name
      */
+// XTEC ************ ELIMINAT - Removed to avoid warnings when debugging
+// 2016.12.28 @sarjona
+/*
     function ReCAPTCHAPlugin($options_name) {
         $args = func_get_args();
         call_user_func_array(array(&$this, "__construct"), $args);
     }
+*/
+//************ FI
 
     /**
      * Php 5 Constructor.
@@ -321,7 +326,14 @@ COMMENT_FORM;
 
         $use_ssl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on");
 
+// XTEC ************ MODIFICAT - Avoid warning when debugging
+// 2016.12.28 @sarjona -->
+        $escaped_error = htmlentities(isset($_GET['rerror'])?$_GET['rerror']:'', ENT_QUOTES);
+//************ ORIGINAL
+/*
         $escaped_error = htmlentities($_GET['rerror'], ENT_QUOTES);
+*/
+//************ FI
 
         echo $this->get_recaptcha_html() . $comment_string;
     }
@@ -378,8 +390,16 @@ JS;
     function saved_comment() {
         if (!is_single() && !is_page())
             return;
+// XTEC ********** MODIFICAT - To avoid warning when debug is enabled
+// 2016.11.25 @sarjona
+        $comment_id = isset($_REQUEST['rcommentid'])?$_REQUEST['rcommentid']:'';
+        $comment_hash = isset($_REQUEST['rchash'])?$_REQUEST['rchash']:'';
+// *********** ORIGINAL
+/*
         $comment_id = $_REQUEST['rcommentid'];
         $comment_hash = $_REQUEST['rchash'];
+*/
+// *********** FI
         if (empty($comment_id) || empty($comment_hash))
            return;
         if ($comment_hash == $this->hash_comment($comment_id)) {

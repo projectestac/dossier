@@ -211,7 +211,7 @@ function display_setup_form( $error = null ) {
 //XTEC ************ AFEGIT - Block access to install functions. Show "site off" message instead.
 //2015.08.05 @nacho
 //2015.11.06 @pferre22
-if ( ( XTEC_ENABLE_INSTALL==null || !XTEC_ENABLE_INSTALL ) && (!isset($agora['server']['enviroment']) || ($agora['server']['enviroment'] != 'LOCAL' && $agora['server']['enviroment'] != 'DES') ) ) {
+if ( !isset($agora['server']['enviroment']) || ($agora['server']['enviroment'] != 'LOCAL' && $agora['server']['enviroment'] != 'DES') ) {
 	$siteoff_file = '../siteoff.html';
 	if (file_exists($siteoff_file)) {
 		include_once($siteoff_file);
