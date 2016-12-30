@@ -420,11 +420,50 @@ function validate_another_blog_signup() {
 	 */
 	$meta = apply_filters( 'add_signup_meta', $meta_defaults );
 
+	// XTEC ************ AFEGIT - Changed signup to duplicate instead of create empty blog
+	// 2016.12.30 @sarjona
+	if ( defined( 'DOSSIER_MASTER_BLOG' ) ) {
+		require_once MUCD_COMPLETE_PATH . '/lib/duplicate.php';
+		$blog_title = (isset($current_user->user_firstname)?$current_user->user_firstname:'') . ' '. (isset($current_user->user_lastname)?$current_user->user_lastname:'');
+		if ( empty($blog_title) ) $blog_title = $current_user->display_name;
+		// Form Data
+		$path = '/'.$current_user->user_login.'/';
+	    $data = array(
+	        'from_site_id'  => DOSSIER_MASTER_BLOG,  // The ID of the master blog to duplicate
+	        'domain'        => $current_user->user_login,
+	        'newdomain'     => $domain,
+	        'path'          => $path,
+	        'title'         => $blog_title,
+	        'email'         => $current_user->user_email,
+	        'copy_files'    => 'yes',
+	        'keep_users'    => 'no',
+	        'public'        => true,
+	        'log'           => 'no',
+	        'log-path'      => '',
+	        'advanced'      => 'hide-advanced-options',
+	        'network_id'    => $wpdb->siteid
+	    );
+	    // Duplicate blog
+	    $form_message = MUCD_Duplicate::duplicate_site($data);
+
+	    // Check if there were errors during creation
+		if ( isset($form_message['error']) ) {
+			new WP_Error('signup_duplication', $form_message['error'], $form_message['error']);
+			return false;
+		}
+
+	    $blog_id = isset( $form_message['site_id'] ) ? $form_message['site_id'] : 0;
+	} else {
+	//************ FI
 	$blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
 
 	if ( is_wp_error( $blog_id ) ) {
 		return false;
 	}
+	// XTEC ************ AFEGIT - Changed signup to duplicate instead of create empty blog
+	// 2016.12.30 @sarjona
+	}
+	//************ FI
 
 	confirm_another_blog_signup( $domain, $path, $blog_title, $current_user->user_login, $current_user->user_email, $meta, $blog_id );
 	return true;
