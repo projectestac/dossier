@@ -108,7 +108,7 @@ define('MULTISITE', true);  // If tables wp_1_xxxx are NOT present
 // define('MULTISITE', false);  // If tables wp_1_xxxx ARE present
 define('SUBDOMAIN_INSTALL', false);
 define('DOMAIN_CURRENT_SITE','dossier-virtual.xtec.cat');
-define('PATH_CURRENT_SITE', '/');
+define('PATH_CURRENT_SITE', '/blocs/dossier/');
 define('SITE_ID_CURRENT_SITE', 1);
 define('BLOG_ID_CURRENT_SITE', 1);
 
