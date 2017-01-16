@@ -1,6 +1,6 @@
-wp-config.php
-wp-content/wp-cache-config.php
-.htaccess
-wp-content/blogs.dir
-wp-content/cache
-wp-content/uploads
+html/wp-config.php
+html/wp-content/wp-cache-config.php
+html/.htaccess
+html/wp-content/blogs.dir
+html/wp-content/cache
+html/wp-content/uploads
