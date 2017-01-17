@@ -117,6 +117,11 @@ define('BLOG_ID_CURRENT_SITE', 1);
  */
 define('WP_DEFAULT_THEME', 'fukasawa');
 
+/*
+ * Blog id for the master (to create the others from this)
+ */
+define('DOSSIER_MASTER_BLOG', 10);
+
 /**
  * HTTPS config.
  */
