@@ -430,33 +430,13 @@ $wpdb->add_table('global', 'wp_blog_versions');
 $wpdb->add_table('global', 'wp_registration_log');
 $wpdb->add_table('global', 'wp_signups');
 $wpdb->add_table('global', 'wp_site');
-$wpdb->add_table('global', 'wp_sitecategories'); // ????????????
 $wpdb->add_table('global', 'wp_sitemeta');
 $wpdb->add_table('global', 'wp_usermeta');
 $wpdb->add_table('global', 'wp_users');
 
 // add specific XTECBlocs tables which are in global database (8)
-$wpdb->add_table('global', 'wp_delblocs');
-$wpdb->add_table('global', 'wp_delblocs_users');
-$wpdb->add_table('global', 'wp_descriptors');
-$wpdb->add_table('global', 'wp_descriptors_pre');
-$wpdb->add_table('global', 'wp_globalposts');
 $wpdb->add_table('global', 'wp_request_types');
 $wpdb->add_table('global', 'wp_requests');
-$wpdb->add_table('global', 'wp_search');
-$wpdb->add_table('global', 'wp_user_blogs');
-
-// tables from an upgrade of WPMU
-// add the tables for the first blog (created during wpmu installation) in global database
-$wpdb->add_table('global', 'wp_1_comments');
-$wpdb->add_table('global', 'wp_1_commentmeta');
-$wpdb->add_table('global', 'wp_1_links');
-$wpdb->add_table('global', 'wp_1_options');
-$wpdb->add_table('global', 'wp_1_postmeta');
-$wpdb->add_table('global', 'wp_1_posts');
-$wpdb->add_table('global', 'wp_1_terms');
-$wpdb->add_table('global', 'wp_1_term_relationships');
-$wpdb->add_table('global', 'wp_1_term_taxonomy');
 
 // tables from a clean installation
 // add the tables for the first blog (created during wp multisite installation) in global database
@@ -466,6 +446,7 @@ $wpdb->add_table('global', 'wp_links');
 $wpdb->add_table('global', 'wp_options');
 $wpdb->add_table('global', 'wp_postmeta');
 $wpdb->add_table('global', 'wp_posts');
+$wpdb->add_table('global', 'wp_termmeta');
 $wpdb->add_table('global', 'wp_terms');
 $wpdb->add_table('global', 'wp_term_relationships');
 $wpdb->add_table('global', 'wp_term_taxonomy');

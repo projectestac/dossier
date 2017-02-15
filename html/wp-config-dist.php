@@ -24,7 +24,7 @@ $isBlocs = true;
 // ** DB settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('WP_CACHE', true); //Added by WP-Cache Manager
-define('WPCACHEHOME', '/dades/blocs/src/wp-content/plugins/wp-super-cache/' ); //Added by WP-Cache Manager
+define('WPCACHEHOME', '/dades/dossier/html/wp-content/plugins/wp-super-cache/' ); //Added by WP-Cache Manager
 define('DB_NAME', 'dossier_global');
 
 /**
@@ -41,7 +41,7 @@ define('DB_USER', 'root');
 /** Database password */
 define('DB_PASSWORD', 'agora');
 
-/** Databbase hostname */
+/** Database hostname */
 define('DB_HOST', 'localhost:3306');
 
 /** Database Charset to use in creating database tables. */
@@ -85,9 +85,8 @@ define('NONCE_SALT',       'put your unique phrase here');
 $table_prefix  = 'wp_';
 
 /** HyperDB settings */
-// HyperDB databases prefix
-define('DB_PREFIX','dossier_');
-define('DB_NUMS',4); /** HyperDB additional databases */
+define('DB_PREFIX', 'dossier_'); // HyperDB databases prefix
+define('DB_NUMS', 3); // HyperDB additional databases
 
 /**
  * For developers: WordPress debugging mode.
@@ -96,7 +95,7 @@ define('DB_NUMS',4); /** HyperDB additional databases */
  * It is strongly recommended that plugin and theme developers use WP_DEBUG
  * in their development environments.
  */
-define('WP_DEBUG', false);
+define('WP_DEBUG', true);
 define('XTEC_DEBUG_HYPERDB', false);
 define('XTEC_DEBUG_SHOW_ALL_MESSAGES', false);
 
@@ -120,7 +119,7 @@ define('WP_DEFAULT_THEME', 'fukasawa');
 /*
  * Blog id for the master (to create the others from this)
  */
-define('DOSSIER_MASTER_BLOG', 10);
+define('DOSSIER_MASTER_BLOG', 2);
 
 /**
  * HTTPS config.
