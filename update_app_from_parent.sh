@@ -37,21 +37,22 @@ mv dossier_new/src html
 
 
 #Copy files
-#copy_to_new .git
-#copy_to_new .gitignore
-#copy_to_new .gitmodules
+copy_to_new .git
+copy_to_new .gitignore
+copy_to_new .gitmodules
 copy_to_new .htaccess
 copy_to_new .htaccess-dist
 copy_to_new .htaccess-dist-nodomain
 copy_to_new CHANGES.txt
 copy_to_new wp-config.php
+copy_to_new db-config.php
 copy_to_new wp-config-dist.php
 copy_to_new wp-config-single.php
 copy_to_new wp-config-dist-nodomain.php
 copy_to_new wp-content/wp-cache-config.php
 
 #Copy directories
-copy_to_new_dir wp-content/blogs.dir
+copy_to_new_dir wp-content/uploads
 copy_to_new_dir wp-content/cache
 #copy_to_new_dir wp-content/plugins/link-manager
 #copy_to_new_dir wp-content/plugins/simple-local-avatars
@@ -69,7 +70,6 @@ copy_to_new_dir wp-content/cache
 delete_new AFEGIT_XTEC
 delete_new config-restricted-dist.php
 delete_new login_moodle.php
-delete_new opcache.php
 delete_new siteoff.html
 delete_new testapp.php
 delete_new works.php
