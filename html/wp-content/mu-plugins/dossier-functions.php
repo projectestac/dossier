@@ -87,7 +87,11 @@ function dossier_one_blog_only($active_signup) {
     $n = count( $blogs );
     if ( $n >= NUM_ALLOWED_BLOGS_PER_USER ) {
         $active_signup = 'none';
-        echo '<div id="signup-not-allowec" class="dossier-signup-not-allowed">' . __( 'You already have your personal blog', 'dossier-functions') . '</div>';
+        $blog_url = reset($blogs)->siteurl; // $blogs is an array of objects
+        echo '<div id="signup-not-allowec" class="dossier-signup-not-allowed">';
+        _e( 'You already have your personal blog', 'dossier-functions');
+        echo ':<br /><a href="' . $blog_url . '" target="_blank">' . $blog_url . '</a>';
+        echo '</div>';
     } else {
         $active_signup = $active_signup;
     }
