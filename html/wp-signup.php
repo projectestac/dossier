@@ -855,7 +855,14 @@ $newblogname = isset($_GET['new']) ? strtolower(preg_replace('/^-|-$|[^-a-zA-Z0-
 
 $current_user = wp_get_current_user();
 if ( $active_signup == 'none' ) {
+
+    // XTEC ************ ELIMINAT - Don't show this message because there is a custom message already sent
+    // 2017.02.22 @agnard
+    /*
 	_e( 'Registration has been disabled.' );
+    */
+    //************ FI
+
 } elseif ( $active_signup == 'blog' && !is_user_logged_in() ) {
 	$login_url = wp_login_url( network_site_url( 'wp-signup.php' ) );
 	echo sprintf( __( 'You must first <a href="%s">log in</a>, and then you can create a new site.' ), $login_url );

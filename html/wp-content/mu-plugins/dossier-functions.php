@@ -2,10 +2,12 @@
 /*
 Plugin Name: DossierFunctions
 Plugin URI: https://github.com/projectestac/dossier
-Description: A pluggin to include specific functions which affects only to Dossier
+Description: A plugin to include specific functions which affects to Dossier only
 Version: 1.0
 Author: Àrea TAC - Departament d'Ensenyament de Catalunya
 */
+
+CONST NUM_ALLOWED_BLOGS_PER_USER = 1;
 
 function dossier_duplicate_blog ($blog_id, $user_id, $domain, $path, $site_id, $meta) {
 	echo "$blog_id, $user_id, $domain, $path, $site_id, $meta";
@@ -63,24 +65,32 @@ function dossier_signup_blogform ( $errors ) {
 }
 add_action('signup_blogform', 'dossier_signup_blogform');
 
-	/**
-	 * Filter site details and error messages following registration.
-	 *
-	 * @param array $result {
-	 *     Array of domain, path, blog name, blog title, user and error messages.
-	 *
-	 *     @type string         $domain     Domain for the site.
-	 *     @type string         $path       Path for the site. Used in subdirectory installs.
-	 *     @type string         $blogname   The unique site name (slug).
-	 *     @type string         $blog_title Blog title.
-	 *     @type string|WP_User $user       By default, an empty string. A user object if provided.
-	 *     @type WP_Error       $errors     WP_Error containing any errors found.
-	 * }
-     * @author sarjona
-	 */
-function dossier_wpmu_validate_blog_signup( $result ) {
-	// TODO check if user has it's own blog created or not
 
-	return $result;
+/**
+ * Check the number of blogs of a user and disable the signup if they already have the allowed blog
+ *
+ * @param string $active_signup Registration type. The value can be 'all', 'none', 'blog', or 'user'.
+ * @return string $active_signup Registration type, modified if condition is met
+ *
+ * @author Toni Ginard
+ */
+function dossier_one_blog_only($active_signup) {
+    // Get the array of the current user's blogs
+    $blogs = get_blogs_of_user(get_current_user_id());
+
+    // All users may be members of blog 1 so remove it from the list
+    if ( !empty ($blogs) && isset( $blogs[ '1' ] )) {
+        unset ( $blogs[ '1' ]);
+    }
+
+    // If the user still has blogs, disable sign up else continue with existing active_signup rules at SiteAdmin->Options
+    $n = count( $blogs );
+    if ( $n >= NUM_ALLOWED_BLOGS_PER_USER ) {
+        $active_signup = 'none';
+        echo '<div id="signup-not-allowec" class="dossier-signup-not-allowed">' . __( 'You already have your personal blog', 'dossier-functions') . '</div>';
+    } else {
+        $active_signup = $active_signup;
+    }
+    return $active_signup;
 }
-add_filter( 'wpmu_validate_blog_signup', 'dossier_wpmu_validate_blog_signup', 10, 1 );
+add_filter('wpmu_active_signup', 'dossier_one_blog_only');
