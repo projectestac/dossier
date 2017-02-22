@@ -15,44 +15,7 @@ function dossier_duplicate_blog ($blog_id, $user_id, $domain, $path, $site_id, $
 // TODO: Not used at the moment. Remove if finally it's not necessary;
 //add_action( 'wpmu_new_blog', 'dossier_duplicate_blog', 10,  6);
 
-/**
- * To initialitze some information in the form to create de blog
- *
- * @param array $signup_defaults {
- *     An array of default site sign-up variables.
- *
- *     @type string $blogname   The site blogname.
- *     @type string $blog_title The site title.
- *     @type array  $errors     An array possibly containing 'blogname' or 'blog_title' errors.
- * }
- * @author sarjona
- */
-function dossier_signup_another_blog_init( $signup_defaults ) {
-	global $current_user;
 
-	// For filling default information (URL is the username and title is the first name and last name)
-	$blog_title = (isset($current_user->user_firstname)?$current_user->user_firstname:'') . ' '. (isset($current_user->user_lastname)?$current_user->user_lastname:'');
-	if ( empty($blog_title) ) $blog_title = $current_user->display_name;
-	$signup_defaults['blogname'] = $current_user->user_login;
-	$signup_defaults['blog_title'] = $blog_title;
-
-	// To avoid error (because in this point, for dossier, blog is not created from a FORM)
-	remove_filter( 'wpmu_validate_blog_signup', 'signup_nonce_check' );
-
-	// For checking if the user has created his/her blog
-	$result = wpmu_validate_blog_signup( $signup_defaults['blogname'], $signup_defaults['blog_title'], $current_user );
-
-	return $signup_defaults;
-}
-add_filter('signup_another_blog_init', 'dossier_signup_another_blog_init', 10, 1);
-
-/**
- * Fires after the site sign-up form.
- *
- * @param array $errors An array possibly containing 'blogname' or 'blog_title' errors.
- *
- * @author sarjona
- */
 function dossier_signup_blogform ( $errors ) {
 	// Block blogname and blogtitle to avoid user edit them
 	echo '<script type="text/javascript">
@@ -60,11 +23,193 @@ function dossier_signup_blogform ( $errors ) {
 			document.forms["setupform"]["blog_title"].readOnly = true;
 		  </script>';
 
-	// TODO Show terms of use
-	echo 'CONDICIONS D\'ÚS -- PENDENT';
+	// Show the option to accept the terms of use
+    ?>
+    <p>
+        <label for="terms_of_use">
+            <input type="checkbox" name="terms_of_use" id="terms_of_use" class="input" />
+            <?php _e( 'I accept the terms of use', 'dossier-functions' ); ?>
+        </label>
+    </p>
+    <?php
 }
 add_action('signup_blogform', 'dossier_signup_blogform');
 
+
+function dossier_signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
+    $current_user = wp_get_current_user();
+
+    if ( ! is_wp_error($errors) ) {
+        $errors = new WP_Error();
+    }
+
+    echo '<h2>' . __( 'Get your PLE blog', 'dossier-functions') . '</h2>';
+
+    if ( $errors->get_error_code() == 'terms_of_use' ) {
+        echo '<p>' . __( 'You must accept the terms of use to create the blog' ) . '</p>';
+    } else {
+        printf(__('Welcome %s. By filling out the form below, you can create your PLE blog.'), $current_user->display_name);
+    }
+
+    // Fill default information (URL is the username and title is the first name and last name)
+    $blog_title = (isset($current_user->user_firstname)?$current_user->user_firstname:'') . ' '. (isset($current_user->user_lastname)?$current_user->user_lastname:'');
+
+    if ( empty($blog_title) ) $blog_title = $current_user->display_name;
+    $signup_defaults['blogname'] = $current_user->user_login;
+    $signup_defaults['blog_title'] = $blog_title;
+
+    // Avoid error (because in this point, for dossier, blog is not created from a form)
+    remove_filter( 'wpmu_validate_blog_signup', 'signup_nonce_check' );
+
+    // Check if the user has created their blog
+    $filtered_results = wpmu_validate_blog_signup( $signup_defaults['blogname'], $signup_defaults['blog_title'], $current_user );
+
+    $blogname = $filtered_results['blogname'];
+    $blog_title = $filtered_results['blog_title'];
+    $errors = $filtered_results['errors'];
+    ?>
+
+    <form id="setupform" method="post" action="wp-signup.php">
+        <input type="hidden" name="stage" value="gimmeanotherblog" />
+        <?php
+        /**
+         * Hidden sign-up form fields output when creating another site or user.
+         *
+         * @since MU
+         *
+         * @param string $context A string describing the steps of the sign-up process. The value can be
+         *                        'create-another-site', 'validate-user', or 'validate-site'.
+         */
+        do_action( 'signup_hidden_fields', 'create-another-site' );
+        ?>
+        <?php show_blog_form($blogname, $blog_title, $errors); ?>
+        <p class="submit"><input type="submit" name="submit" class="submit" value="<?php esc_attr_e( 'Create Site' ) ?>" /></p>
+    </form>
+    <?php
+}
+
+
+
+function dossier_validate_another_blog_signup() {
+    global $wpdb, $blogname, $blog_title, $errors, $domain, $path;
+    $current_user = wp_get_current_user();
+    if ( ! is_user_logged_in() ) {
+        die();
+    }
+
+    $terms = ( isset( $_POST['terms_of_use'] ) && ( $_POST['terms_of_use'] == 'on' )) ? true : false;
+
+    if ( false === $terms ) {
+        $terms_error = new WP_Error( 'terms_of_use', __( 'You must accept the terms of use', 'dossier-functions' ));
+        dossier_signup_another_blog($blogname, $blog_title, $terms_error);
+        return false;
+    } else {
+        update_user_meta( get_current_user_id(), 'terms_of_use', 'accepted' );
+    }
+
+    $result = validate_blog_form();
+
+    // Extracted values set/overwrite globals.
+    $domain = $result['domain'];
+    $path = $result['path'];
+    $blogname = $result['blogname'];
+    $blog_title = $result['blog_title'];
+    $errors = $result['errors'];
+
+    if ( $errors->get_error_code() ) {
+        dossier_signup_another_blog($blogname, $blog_title, $errors);
+        return false;
+    }
+
+    $public = (int) $_POST['blog_public'];
+
+    $blog_meta_defaults = array(
+        'lang_id' => 1,
+        'public'  => $public
+    );
+
+    // Handle the language setting for the new site.
+    if ( ! empty( $_POST['WPLANG'] ) ) {
+
+        $languages = signup_get_available_languages();
+
+        if ( in_array( $_POST['WPLANG'], $languages ) ) {
+            $language = wp_unslash( sanitize_text_field( $_POST['WPLANG'] ) );
+
+            if ( $language ) {
+                $blog_meta_defaults['WPLANG'] = $language;
+            }
+        }
+
+    }
+
+    /**
+     * Filter the new site meta variables.
+     *
+     * @since MU
+     * @deprecated 3.0.0 Use the 'add_signup_meta' filter instead.
+     *
+     * @param array $blog_meta_defaults An array of default blog meta variables.
+     */
+    $meta_defaults = apply_filters( 'signup_create_blog_meta', $blog_meta_defaults );
+
+    /**
+     * Filter the new default site meta variables.
+     *
+     * @since 3.0.0
+     *
+     * @param array $meta {
+     *     An array of default site meta variables.
+     *
+     *     @type int $lang_id     The language ID.
+     *     @type int $blog_public Whether search engines should be discouraged from indexing the site. 1 for true, 0 for false.
+     * }
+     */
+    $meta = apply_filters( 'add_signup_meta', $meta_defaults );
+
+    if ( defined( 'DOSSIER_MASTER_BLOG' ) ) {
+        require_once MUCD_COMPLETE_PATH . '/lib/duplicate.php';
+        $blog_title = (isset($current_user->user_firstname)?$current_user->user_firstname:'') . ' '. (isset($current_user->user_lastname)?$current_user->user_lastname:'');
+        if ( empty($blog_title) ) $blog_title = $current_user->display_name;
+        // Form Data
+        $path = '/'.$current_user->user_login.'/';
+        $data = array(
+            'from_site_id'  => DOSSIER_MASTER_BLOG,  // The ID of the master blog to duplicate
+            'domain'        => $current_user->user_login,
+            'newdomain'     => $domain,
+            'path'          => $path,
+            'title'         => $blog_title,
+            'email'         => $current_user->user_email,
+            'copy_files'    => 'yes',
+            'keep_users'    => 'no',
+            'public'        => true,
+            'log'           => 'no',
+            'log-path'      => '',
+            'advanced'      => 'hide-advanced-options',
+            'network_id'    => $wpdb->siteid
+        );
+        // Duplicate blog
+        $form_message = MUCD_Duplicate::duplicate_site($data);
+
+        // Check if there were errors during creation
+        if ( isset($form_message['error']) ) {
+            new WP_Error('signup_duplication', $form_message['error'], $form_message['error']);
+            return false;
+        }
+
+        $blog_id = isset( $form_message['site_id'] ) ? $form_message['site_id'] : 0;
+
+    } else {
+        $blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
+
+        if ( is_wp_error( $blog_id ) ) {
+            return false;
+        }
+    }
+
+    confirm_another_blog_signup( $domain, $path, $blog_title, $current_user->user_login, $current_user->user_email, $meta, $blog_id );
+    die();
+}
 
 /**
  * Check the number of blogs of a user and disable the signup if they already have the allowed blog
