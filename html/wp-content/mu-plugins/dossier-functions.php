@@ -243,3 +243,57 @@ function dossier_one_blog_only($active_signup) {
     return $active_signup;
 }
 add_filter('wpmu_active_signup', 'dossier_one_blog_only');
+
+
+/**
+ * Class for adding a new field to the options-general.php page
+ */
+class Add_Settings_Field {
+
+    /**
+     * Class constructor
+     */
+    public function __construct() {
+        add_action( 'admin_init' , array( $this , 'register_fields' ) );
+    }
+
+    /**
+     * Add new fields to wp-admin/options-general.php page
+     */
+    public function register_fields() {
+        register_setting( 'reading', 'extra_blog_description', 'esc_attr' );
+        add_settings_field(
+            'extra_blog_desc_id',
+            __( 'Privacy' ),
+            array( $this, 'fields_html' ),
+            'reading'
+        );
+    }
+
+    /**
+     * HTML for extra settings
+     */
+    public function fields_html() {
+        ?>
+        <fieldset>
+            <legend class="screen-reader-text"><span><?php _e( 'Privacy' ); ?></span></legend>
+        <label class="checkbox" for="blog-private-1">
+            <input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', get_option( 'blog_public' ) ); ?> />
+            <?php _e( 'Visible only to registered users of this network', 'dossier-functions' ); ?>
+        </label>
+        <br/>
+        <label class="checkbox" for="blog-private-2">
+            <input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', get_option( 'blog_public' ) ); ?> />
+            <?php _e( 'Visible only to registered users of this site', 'dossier-functions' ); ?>
+        </label>
+        <br/>
+        <label class="checkbox" for="blog-private-3">
+            <input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked( '-3', get_option( 'blog_public' ) ); ?> />
+            <?php _e( 'Visible only to administrators of this site', 'dossier-functions' ); ?>
+        </label>
+        </fieldset>
+        <?php
+    }
+
+}
+new Add_Settings_Field();
