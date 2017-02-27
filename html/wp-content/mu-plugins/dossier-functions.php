@@ -264,17 +264,17 @@ class dossier_add_settings_field {
         <fieldset>
             <legend class="screen-reader-text"><span><?php _e( 'Privacy' ); ?></span></legend>
         <label class="checkbox" for="blog-private-1">
-            <input id="blog-private-1" type="radio" name="xtec_blog_public" value="1" <?php if ( 1 == $xtec_blog_public ) { echo 'checked="checked"' ; } ?> />
+            <input id="blog-private-1" type="radio" name="xtec_blog_public" value="1" <?php if ( '1' == $xtec_blog_public ) { echo 'checked="checked"' ; } ?> />
             <?php _e( 'Visible to everybody (public)', 'dossier-functions' ); ?>
         </label>
         <br/>
         <label class="checkbox" for="blog-private-2">
-            <input id="blog-private-2" type="radio" name="xtec_blog_public" value="2" <?php if ( 2 == $xtec_blog_public ) { echo 'selected="selected"' ; }  ?> />
+            <input id="blog-private-2" type="radio" name="xtec_blog_public" value="2" <?php if ( '2' == $xtec_blog_public ) { echo 'checked="checked"' ; }  ?> />
             <?php _e( 'Visible only to XTEC users (restricted)', 'dossier-functions' ); ?>
         </label>
         <br/>
         <label class="checkbox" for="blog-private-3">
-            <input id="blog-private-3" type="radio" name="xtec_blog_public" value="3" <?php if ( 3 == $xtec_blog_public ) { echo 'selected="selected"' ; }  ?> />
+            <input id="blog-private-3" type="radio" name="xtec_blog_public" value="3" <?php if ( '3' == $xtec_blog_public ) { echo 'checked="checked"' ; }  ?> />
             <?php _e( 'Visible only to administrators (private)', 'dossier-functions' ); ?>
         </label>
         </fieldset>
