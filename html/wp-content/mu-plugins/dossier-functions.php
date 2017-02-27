@@ -15,7 +15,12 @@ function dossier_duplicate_blog ($blog_id, $user_id, $domain, $path, $site_id, $
 // TODO: Not used at the moment. Remove if finally it's not necessary;
 //add_action( 'wpmu_new_blog', 'dossier_duplicate_blog', 10,  6);
 
-
+/**
+ * Extra form content for signup blog form
+ * @param $errors
+ *
+ * @author Sara Arjona
+ */
 function dossier_signup_blogform ( $errors ) {
 	// Block blogname and blogtitle to avoid user edit them
 	echo '<script type="text/javascript">
@@ -35,7 +40,11 @@ function dossier_signup_blogform ( $errors ) {
 }
 add_action('signup_blogform', 'dossier_signup_blogform');
 
-
+/**
+ * Custom function to replace signup_another_blog() in wp-signup.php
+ *
+ * @author Toni Ginard
+ */
 function dossier_signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
     $current_user = wp_get_current_user();
 
@@ -71,25 +80,18 @@ function dossier_signup_another_blog( $blogname = '', $blog_title = '', $errors 
 
     <form id="setupform" method="post" action="wp-signup.php">
         <input type="hidden" name="stage" value="gimmeanotherblog" />
-        <?php
-        /**
-         * Hidden sign-up form fields output when creating another site or user.
-         *
-         * @since MU
-         *
-         * @param string $context A string describing the steps of the sign-up process. The value can be
-         *                        'create-another-site', 'validate-user', or 'validate-site'.
-         */
-        do_action( 'signup_hidden_fields', 'create-another-site' );
-        ?>
         <?php show_blog_form($blogname, $blog_title, $errors); ?>
         <p class="submit"><input type="submit" name="submit" class="submit" value="<?php esc_attr_e( 'Create Site' ) ?>" /></p>
     </form>
     <?php
 }
 
-
-
+/**
+ * Custom function to replace validate_another_blog_signup() in wp-signup.php
+ *
+ * @author Toni Ginard
+ * @author Sara Arjona
+ */
 function dossier_validate_another_blog_signup() {
     global $wpdb, $blogname, $blog_title, $errors, $domain, $path;
     $current_user = wp_get_current_user();
@@ -123,7 +125,7 @@ function dossier_validate_another_blog_signup() {
 
     $public = (int) $_POST['blog_public'];
 
-    $blog_meta_defaults = array(
+    $meta_defaults = array(
         'lang_id' => 1,
         'public'  => $public
     );
@@ -142,16 +144,6 @@ function dossier_validate_another_blog_signup() {
         }
 
     }
-
-    /**
-     * Filter the new site meta variables.
-     *
-     * @since MU
-     * @deprecated 3.0.0 Use the 'add_signup_meta' filter instead.
-     *
-     * @param array $blog_meta_defaults An array of default blog meta variables.
-     */
-    $meta_defaults = apply_filters( 'signup_create_blog_meta', $blog_meta_defaults );
 
     /**
      * Filter the new default site meta variables.
@@ -246,54 +238,64 @@ add_filter('wpmu_active_signup', 'dossier_one_blog_only');
 
 
 /**
- * Class for adding a new field to the options-general.php page
+ * Class for adding a new field to the options | reading page
  */
-class Add_Settings_Field {
+class dossier_add_settings_field {
 
-    /**
-     * Class constructor
-     */
     public function __construct() {
-        add_action( 'admin_init' , array( $this , 'register_fields' ) );
+        add_action( 'admin_init', array( $this , 'register_fields' ));
+        add_action( 'signup_blogform', array( $this, 'fields_html' ), 1 );
     }
 
-    /**
-     * Add new fields to wp-admin/options-general.php page
-     */
     public function register_fields() {
         register_setting( 'reading', 'extra_blog_description', 'esc_attr' );
-        add_settings_field(
-            'extra_blog_desc_id',
-            __( 'Privacy' ),
-            array( $this, 'fields_html' ),
-            'reading'
-        );
+        add_settings_field( 'extra_blog_desc_id', __( 'Privacy' ), array( $this, 'fields_html' ), 'reading' );
     }
 
     /**
-     * HTML for extra settings
+     * HTML for the extra setting
      */
     public function fields_html() {
+
+        $xtec_blog_public = get_option( 'xtec_blog_public', false );
+        $xtec_blog_public = ( false === $xtec_blog_public ) ? 1 : $xtec_blog_public;
+
         ?>
         <fieldset>
             <legend class="screen-reader-text"><span><?php _e( 'Privacy' ); ?></span></legend>
         <label class="checkbox" for="blog-private-1">
-            <input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', get_option( 'blog_public' ) ); ?> />
-            <?php _e( 'Visible only to registered users of this network', 'dossier-functions' ); ?>
+            <input id="blog-private-1" type="radio" name="xtec_blog_public" value="1" <?php if ( 1 == $xtec_blog_public ) { echo 'checked="checked"' ; } ?> />
+            <?php _e( 'Visible to everybody (public)', 'dossier-functions' ); ?>
         </label>
         <br/>
         <label class="checkbox" for="blog-private-2">
-            <input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', get_option( 'blog_public' ) ); ?> />
-            <?php _e( 'Visible only to registered users of this site', 'dossier-functions' ); ?>
+            <input id="blog-private-2" type="radio" name="xtec_blog_public" value="2" <?php if ( 2 == $xtec_blog_public ) { echo 'selected="selected"' ; }  ?> />
+            <?php _e( 'Visible only to XTEC users (restricted)', 'dossier-functions' ); ?>
         </label>
         <br/>
         <label class="checkbox" for="blog-private-3">
-            <input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked( '-3', get_option( 'blog_public' ) ); ?> />
-            <?php _e( 'Visible only to administrators of this site', 'dossier-functions' ); ?>
+            <input id="blog-private-3" type="radio" name="xtec_blog_public" value="3" <?php if ( 3 == $xtec_blog_public ) { echo 'selected="selected"' ; }  ?> />
+            <?php _e( 'Visible only to administrators (private)', 'dossier-functions' ); ?>
         </label>
         </fieldset>
         <?php
     }
 
 }
-new Add_Settings_Field();
+new dossier_add_settings_field();
+
+/**
+ * Save extra param to wp_options
+ *
+ * @param $whitelist_options
+ * @return mixed
+ *
+ * @author Toni Ginard
+ */
+function dossier_save_extra_options( $whitelist_options ) {
+
+    $whitelist_options['reading'][] = 'xtec_blog_public';
+
+    return $whitelist_options;
+}
+add_filter( 'whitelist_options', 'dossier_save_extra_options' );
