@@ -80,6 +80,7 @@ function dossier_signup_another_blog( $blogname = '', $blog_title = '', $errors 
 
     <form id="setupform" method="post" action="wp-signup.php">
         <input type="hidden" name="stage" value="gimmeanotherblog" />
+        <?php do_action( 'signup_hidden_fields', 'create-another-site' ); // Required for nonce check ?>
         <?php show_blog_form($blogname, $blog_title, $errors); ?>
         <p class="submit"><input type="submit" name="submit" class="submit" value="<?php esc_attr_e( 'Create Site' ) ?>" /></p>
     </form>
@@ -229,9 +230,8 @@ function dossier_one_blog_only($active_signup) {
         _e( 'You already have your personal blog', 'dossier-functions');
         echo ':<br /><a href="' . $blog_url . '" target="_blank">' . $blog_url . '</a>';
         echo '</div>';
-    } else {
-        $active_signup = $active_signup;
     }
+
     return $active_signup;
 }
 add_filter('wpmu_active_signup', 'dossier_one_blog_only');
@@ -299,3 +299,39 @@ function dossier_save_extra_options( $whitelist_options ) {
     return $whitelist_options;
 }
 add_filter( 'whitelist_options', 'dossier_save_extra_options' );
+
+
+/**
+ * Access control
+ */
+$xtec_blog_public = get_option( 'xtec_blog_public' );
+
+if ( ( '2' == $xtec_blog_public ) || ( '3' == $xtec_blog_public ) ) {
+    add_action( 'template_redirect', 'dossier_login_redirect' );
+    add_action( 'login_form', 'dossier_redirect_login_message' );
+}
+
+function dossier_login_redirect() {
+    $xtec_blog_public = get_option( 'xtec_blog_public' );
+
+    $current_user_id = get_current_user_id();
+
+    // No user logged
+    if ( 0 == $current_user_id ) {
+        auth_redirect();
+    }
+
+    $user_info = get_userdata( $current_user_id );
+
+    //var_dump($user_info); die('dd');
+
+    if ( ( '2' == $xtec_blog_public ) && !is_user_logged_in() ) {
+
+    }
+}
+
+function dossier_redirect_login_message() {
+    echo '<div style="margin: 5px 0 10px 0; padding: 5px; border: 2px solid #ffb900; color: #ffb900; font-weight: bold;">';
+    _e( 'Access to this site is restricted to XTEC users. Please log in using an XTEC account to continue.', 'dossier-functions' );
+    echo '</div>';
+}
