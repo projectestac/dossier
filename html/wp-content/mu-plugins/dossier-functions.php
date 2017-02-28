@@ -304,34 +304,81 @@ add_filter( 'whitelist_options', 'dossier_save_extra_options' );
 /**
  * Access control
  */
-$xtec_blog_public = get_option( 'xtec_blog_public' );
+function dossier_access_control() {
+    $xtec_blog_public = get_option( 'xtec_blog_public' );
 
-if ( ( '2' == $xtec_blog_public ) || ( '3' == $xtec_blog_public ) ) {
-    add_action( 'template_redirect', 'dossier_login_redirect' );
-    add_action( 'login_form', 'dossier_redirect_login_message' );
+    switch ($xtec_blog_public) {
+        case '1':
+            return ;
+            break;
+
+        case '2':
+            $current_user_id = get_current_user_id();
+
+            // Check for no user logged
+            if ( 0 == $current_user_id ) {
+                add_action( 'template_redirect', 'auth_redirect' ); // auth_redirect is a WordPress core function
+                add_action( 'login_form', 'dossier_redirect_login_message' );
+                return ;
+            }
+
+            $user_info = get_userdata( $current_user_id );
+            $is_xtec_address = ( substr( $user_info->data->user_email, -(strlen( '@xtec.cat' )) ) === '@xtec.cat' );
+            if ( !$is_xtec_address ) {
+                dossier_access_not_allowed();
+//                add_action( 'template_redirect', 'dossier_login_redirect' );
+//                add_action( 'login_form', 'dossier_redirect_login_message' );
+            }
+            break;
+
+        case '3':
+            break;
+    }
 }
+add_action( 'init', 'dossier_access_control' );
+//remove_action ( 'wp_login', 'dossier_access_control' );
 
 function dossier_login_redirect() {
     $xtec_blog_public = get_option( 'xtec_blog_public' );
 
     $current_user_id = get_current_user_id();
 
-    // No user logged
-    if ( 0 == $current_user_id ) {
-        auth_redirect();
+    // Check for no user logged
+    if ((( '2' == $xtec_blog_public ) || ( '3' == $xtec_blog_public )) && ( 0 == $current_user_id )) {
+        add_action( 'template_redirect', 'auth_redirect' ); // auth_redirect is a WordPress core function
     }
 
     $user_info = get_userdata( $current_user_id );
 
-    //var_dump($user_info); die('dd');
+    $length = strlen( '@xtec.cat' );
+    $is_xtec_address = ( substr( $user_info->data->user_email, -$length ) === '@xtec.cat' );
 
-    if ( ( '2' == $xtec_blog_public ) && !is_user_logged_in() ) {
-
+    if (( '2' == $xtec_blog_public ) && !$is_xtec_address) {
+        add_action( 'template_redirect', 'dossier_login_redirect' );
+        add_action( 'login_form', 'dossier_redirect_login_message' );
     }
 }
 
 function dossier_redirect_login_message() {
-    echo '<div style="margin: 5px 0 10px 0; padding: 5px; border: 2px solid #ffb900; color: #ffb900; font-weight: bold;">';
-    _e( 'Access to this site is restricted to XTEC users. Please log in using an XTEC account to continue.', 'dossier-functions' );
-    echo '</div>';
+    $xtec_blog_public = get_option( 'xtec_blog_public' );
+
+    switch ($xtec_blog_public) {
+        case '2':
+            $message = __( 'Access to this site is restricted to XTEC users. Please log in using an XTEC account to continue.', 'dossier-functions' );
+            break;
+        case '3':
+            $message = __( 'Access to this site is restricted to the site owner. Please log in using your XTEC account if you are the owner.', 'dossier-functions' );
+            break;
+        default:
+            $message = '';
+    }
+
+    echo '<div style="margin: 5px 0 10px 0; padding: 5px; border: 2px solid #ffb900; color: #ffb900; font-weight: bold;">' . $message . '</div>';
+
+    return ;
+}
+
+function dossier_access_not_allowed() {
+    _e( 'You are not allowed to access this site', 'dossier-functions');
+    exit ;
 }
