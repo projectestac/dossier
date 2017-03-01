@@ -162,8 +162,9 @@ function dossier_validate_another_blog_signup() {
 
     if ( defined( 'DOSSIER_MASTER_BLOG' ) ) {
         require_once MUCD_COMPLETE_PATH . '/lib/duplicate.php';
-        $blog_title = (isset($current_user->user_firstname)?$current_user->user_firstname:'') . ' '. (isset($current_user->user_lastname)?$current_user->user_lastname:'');
-        if ( empty($blog_title) ) $blog_title = $current_user->display_name;
+        $blog_title = ( isset( $current_user->user_firstname ) ? $current_user->user_firstname : '' ) . ' '. ( isset( $current_user->user_lastname ) ? $current_user->user_lastname : '' );
+        if ( empty($blog_title) ) { $blog_title = $current_user->display_name; }
+
         // Form Data
         $path = '/'.$current_user->user_login.'/';
         $data = array(
@@ -181,6 +182,7 @@ function dossier_validate_another_blog_signup() {
             'advanced'      => 'hide-advanced-options',
             'network_id'    => $wpdb->siteid
         );
+
         // Duplicate blog
         $form_message = MUCD_Duplicate::duplicate_site($data);
 
@@ -191,6 +193,11 @@ function dossier_validate_another_blog_signup() {
         }
 
         $blog_id = isset( $form_message['site_id'] ) ? $form_message['site_id'] : 0;
+
+        // Save value of xtec_blog_public chosen by the user to wp_options
+        switch_to_blog( $blog_id );
+        update_option( 'xtec_blog_public', $_POST['xtec_blog_public'] );
+        restore_current_blog();
 
     } else {
         $blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
@@ -205,7 +212,7 @@ function dossier_validate_another_blog_signup() {
 }
 
 /**
- * Check the number of blogs of a user and disable the signup if they already have the allowed blog
+ * Block access to blog creation if the user already have their allowed blog
  *
  * @param string $active_signup Registration type. The value can be 'all', 'none', 'blog', or 'user'.
  * @return string $active_signup Registration type, modified if condition is met
@@ -213,23 +220,18 @@ function dossier_validate_another_blog_signup() {
  * @author Toni Ginard
  */
 function dossier_one_blog_only($active_signup) {
-    // Get the array of the current user's blogs
-    $blogs = get_blogs_of_user(get_current_user_id());
+    $current_user_id = get_current_user_id();
+    $user_login = get_userdata( $current_user_id )->data->user_login;
+    $blogs = get_blogs_of_user( $current_user_id );
 
-    // All users may be members of blog 1 so remove it from the list
-    if ( !empty ($blogs) && isset( $blogs[ '1' ] )) {
-        unset ( $blogs[ '1' ]);
-    }
-
-    // If the user still has blogs, disable sign up else continue with existing active_signup rules at SiteAdmin->Options
-    $n = count( $blogs );
-    if ( $n >= NUM_ALLOWED_BLOGS_PER_USER ) {
-        $active_signup = 'none';
-        $blog_url = reset($blogs)->siteurl; // $blogs is an array of objects
-        echo '<div id="signup-not-allowec" class="dossier-signup-not-allowed">';
-        _e( 'You already have your personal blog', 'dossier-functions');
-        echo ':<br /><a href="' . $blog_url . '" target="_blank">' . $blog_url . '</a>';
-        echo '</div>';
+    foreach ( $blogs as $blog ){
+        if ( trim( $blog->path, '/' ) == $user_login ) {
+            $active_signup = 'none';
+            echo '<div id="signup-not-allowec" class="dossier-signup-not-allowed">';
+            _e( 'You already have your personal blog', 'dossier-functions');
+            echo ': <a href="' . $blog->siteurl . '" target="_blank">' . $blog->siteurl . '</a>';
+            echo '</div>';
+        }
     }
 
     return $active_signup;
@@ -238,7 +240,9 @@ add_filter('wpmu_active_signup', 'dossier_one_blog_only');
 
 
 /**
- * Class for adding a new field to the options | reading page
+ * Class to add a new field to the options | reading page
+ *
+ * @author Toni Ginard
  */
 class dossier_add_settings_field {
 
@@ -275,7 +279,7 @@ class dossier_add_settings_field {
         <br/>
         <label class="checkbox" for="blog-private-3">
             <input id="blog-private-3" type="radio" name="xtec_blog_public" value="3" <?php if ( '3' == $xtec_blog_public ) { echo 'checked="checked"' ; }  ?> />
-            <?php _e( 'Visible only to administrators (private)', 'dossier-functions' ); ?>
+            <?php _e( 'Visible only to the owner (private)', 'dossier-functions' ); ?>
         </label>
         </fieldset>
         <?php
@@ -300,65 +304,59 @@ function dossier_save_extra_options( $whitelist_options ) {
 }
 add_filter( 'whitelist_options', 'dossier_save_extra_options' );
 
-
 /**
- * Access control
+ * Access control to the blog. Blocks access depending on the privacy configuration
+ *
+ * @author Toni Ginard
  */
 function dossier_access_control() {
     $xtec_blog_public = get_option( 'xtec_blog_public' );
 
-    switch ($xtec_blog_public) {
-        case '1':
+    // Block access to anonymous access. Done here to avoid duplication of code
+    if ( ( 2 == $xtec_blog_public ) || ( 3 == $xtec_blog_public )) {
+        $current_user_id = get_current_user_id();
+        if ( 0 == $current_user_id ) {
+            add_action( 'template_redirect', 'auth_redirect' ); // auth_redirect is a WordPress core function
+            add_action( 'login_form', 'dossier_redirect_login_message' );
             return ;
+        }
+        $user = wp_get_current_user();
+        $is_validator = ( in_array( 'validator', (array) $user->roles ) );
+    }
+
+    switch ($xtec_blog_public) {
+        case '1': // Public (Nothing done at the moment)
             break;
 
-        case '2':
-            $current_user_id = get_current_user_id();
+        case '2': // Access only for xtec users and network admins
+            $is_xtec_address = ( substr( get_userdata( $current_user_id )->data->user_email, -( strlen( '@xtec.cat' ))) === '@xtec.cat' );
 
-            // Check for no user logged
-            if ( 0 == $current_user_id ) {
-                add_action( 'template_redirect', 'auth_redirect' ); // auth_redirect is a WordPress core function
-                add_action( 'login_form', 'dossier_redirect_login_message' );
-                return ;
-            }
-
-            $user_info = get_userdata( $current_user_id );
-            $is_xtec_address = ( substr( $user_info->data->user_email, -(strlen( '@xtec.cat' )) ) === '@xtec.cat' );
-            if ( !$is_xtec_address ) {
-                dossier_access_not_allowed();
-//                add_action( 'template_redirect', 'dossier_login_redirect' );
-//                add_action( 'login_form', 'dossier_redirect_login_message' );
+            // Allow access to XTEC Users and network admins
+            if ( !$is_xtec_address && !is_super_admin() && !$is_validator ) {
+                wp_die( sprintf( __( 'This site is only available to XTEC users. Please go to <a href="%1$s">main site</a> to log in again.', 'dossier-functions' ), network_site_url() ));
             }
             break;
 
-        case '3':
+        case '3': // Access only to owner and network admins
+            $user_name = get_userdata( $current_user_id )->data->user_login;
+            $owner = trim( get_blog_details( get_current_blog_id() )->path, '/' );
+
+            if ( ( $owner !== $user_name ) && !is_super_admin() && !$is_validator ) {
+                wp_die( sprintf( __( 'You are logged as %1$s, but this site is only available to its owner (%2$s). Go to <a href="%3$s">main site</a>.', 'dossier-functions' ), $user_name, $owner, network_site_url() ));
+            }
             break;
     }
+
+    return ;
 }
 add_action( 'init', 'dossier_access_control' );
-//remove_action ( 'wp_login', 'dossier_access_control' );
+remove_action ( 'wp_login', 'dossier_access_control' ); // Deactivate access control in login page
 
-function dossier_login_redirect() {
-    $xtec_blog_public = get_option( 'xtec_blog_public' );
-
-    $current_user_id = get_current_user_id();
-
-    // Check for no user logged
-    if ((( '2' == $xtec_blog_public ) || ( '3' == $xtec_blog_public )) && ( 0 == $current_user_id )) {
-        add_action( 'template_redirect', 'auth_redirect' ); // auth_redirect is a WordPress core function
-    }
-
-    $user_info = get_userdata( $current_user_id );
-
-    $length = strlen( '@xtec.cat' );
-    $is_xtec_address = ( substr( $user_info->data->user_email, -$length ) === '@xtec.cat' );
-
-    if (( '2' == $xtec_blog_public ) && !$is_xtec_address) {
-        add_action( 'template_redirect', 'dossier_login_redirect' );
-        add_action( 'login_form', 'dossier_redirect_login_message' );
-    }
-}
-
+/**
+ * Shows a message to inform about the reason why the blog cannot be accessed. Called from dossier_access_control
+ *
+ * @author Toni Ginard
+ */
 function dossier_redirect_login_message() {
     $xtec_blog_public = get_option( 'xtec_blog_public' );
 
@@ -378,7 +376,12 @@ function dossier_redirect_login_message() {
     return ;
 }
 
-function dossier_access_not_allowed() {
-    _e( 'You are not allowed to access this site', 'dossier-functions');
-    exit ;
+function add_validator() {
+    add_role( 'validator', __( 'Validator', 'dossier-functions' ), array(
+        'read' => true,
+        'read_private_pages' => true,
+        'read_private_posts' => true,
+    ) );
 }
+// Adds the validator role
+add_action('init', 'add_validator');
