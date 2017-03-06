@@ -301,6 +301,10 @@ body a,
 .main-menu:before,
 .widgets:before,
 .widget + .widget:before,
+/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.menu:before,
+/* ************ FI */
 .credits:before {
 	content: "";
 	display: block;
@@ -313,7 +317,10 @@ body a,
 
 /* Navigation --------------------------------------- */
 
-
+/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.menu li,
+/* ************ FI */
 .main-menu li {
 	display: block;
 	margin-top: 13px;
@@ -323,16 +330,39 @@ body a,
 	position: relative;
 }
 
+/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.menu > li:first-child,
+/* ************ FI */
 .main-menu > li:first-child { margin-top: 0; }
 
+/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.menu ul,
+/* ************ FI */
 .main-menu ul { margin-left: 20px; }
 
+/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.menu a,
+/* ************ FI */
 .main-menu a { color: #999; }
 
+/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.menu a:hover,
+.menu .current-menu-item > a,
+.menu .current_page_item > a,
+/* ************ FI */
 .main-menu a:hover,
 .main-menu .current-menu-item > a,
 .main-menu .current_page_item > a { color: #333; }
 
+/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.menu .current-menu-item:before,
+.menu .current_page_item:before,
+/* ************ FI */
 .main-menu .current-menu-item:before,
 .main-menu .current_page_item:before {
 	content: '\f405';
@@ -406,19 +436,34 @@ body a,
 .widget_archive li,
 .widget_categories li,
 .widget_meta li,
+/* XTEC ************ ELIMINAT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+/*
 .widget_nav_menu li,
+*/
+/* ************ FI */
 .widget_pages { color: #999; }
 
 .widget_archive li a,
 .widget_categories li a,
 .widget_meta li a,
+/* XTEC ************ ELIMINAT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+/*
 .widget_nav_menu li a,
+*/
+/* ************ FI */
 .widget_pages li a { color: #333; }
 
 .widget_archive li a:hover,
 .widget_categories li a:hover,
 .widget_meta li a:hover,
+/* XTEC ************ ELIMINAT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+/*
 .widget_nav_menu li a:hover,
+*/
+/* ************ FI */
 .widget_pagaes li a:hover { 
 	color: #019EBD; 
 	text-decoration: none;
@@ -426,8 +471,15 @@ body a,
 
 .widget_archive li:before,
 .widget_categories li:before,
+/* XTEC ************ MODIFICAT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.widget_meta li:before {
+/* ************ ORIGINAL */
+/*
 .widget_meta li:before,
 .widget_nav_menu li:before {
+*/
+/* ************ FI */
 	font: 16px/1 'Genericons';
 	width: 16px;
 	height: 16px;
@@ -442,7 +494,13 @@ body a,
 .widget_archive li:before { content: '\f307'; }
 .widget_categories li:before { content: '\f301'; }
 .widget_meta li:before { content: '\f445'; }
+
+/* XTEC ************ ELIMINAT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+/*
 .widget_nav_menu li:before { content: '\f429'; }
+*/
+/* ************ FI */
 
 
 /* Widget RSS --------------------------------------- */
@@ -2095,6 +2153,10 @@ img#wpstats { display: none; }
 	
 	.main-menu,
 	.widgets,
+	/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+	/* 2017.02.17 @xaviernietosanchez */
+	.menu,
+	/* ************ FI */
 	.credits {
 		display: none;
 	}
@@ -2481,6 +2543,7 @@ img#wpstats { display: none; }
 //2016.11.14  @xaviernietosanchez */
 
 /* Change icon article link */
+.menu .current-menu-item:before, .menu .current_page_item:before,
 .main-menu .current-menu-item:before, .main-menu .current_page_item:before {
   content: '\f501';
 }
@@ -2496,6 +2559,7 @@ img#wpstats { display: none; }
 }
 
 /* Change color links in main-menu */
+.menu a,
 .main-menu a {
   color: #494949;
 }
@@ -2505,3 +2569,41 @@ body.home div.category-pendents{
 	display:none;
 }
 /*//************ FI*/
+
+/* XTEC ************ AFEGIT - Add same styles to secondary menu */
+/* 2017.02.17 @xaviernietosanchez */
+.widget-content .menu li{
+	line-height: 100% !important;
+	padding: 0 !important;
+	border-bottom: 0 !important;
+}
+
+ul.menu ul.sub-menu{
+	border: 0 !important;
+}
+
+.widget-content ul ul li:first-child{
+	margin-top: 13px !important;
+	border: 0 !important;
+}
+
+.menu:before{
+	margin: 0px;
+	background: transparent;
+}
+
+.widget_nav_menu .widget-title{
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+.widget-global-content:before{
+	content: "";
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: #e7e7e7;
+    margin: 35px 0;
+}
+
+/* ************ FI */
