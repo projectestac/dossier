@@ -376,6 +376,11 @@ function dossier_redirect_login_message() {
     return ;
 }
 
+/**
+ * Adds the validator role
+ *
+ * @author Toni Ginard
+ */
 function add_validator() {
     add_role( 'validator', __( 'Validator', 'dossier-functions' ), array(
         'read' => true,
@@ -383,5 +388,70 @@ function add_validator() {
         'read_private_posts' => true,
     ) );
 }
-// Adds the validator role
-add_action('init', 'add_validator');
+add_action( 'init', 'add_validator' );
+
+function dossier_set_as_validator() {
+    $current_user_id = get_current_user_id();
+
+    $xtec_is_validator = get_user_meta( $current_user_id, 'xtec_is_validator' )[0];
+
+    // TODO: Complete this function and set actions
+}
+
+/**
+ * Add column validator in wp-admin/network/users.php
+ *
+ * @param $users_columns
+ * @return mixed
+ *
+ * @author Toni Ginard
+ */
+function dossier_ms_users_list_add_column ($users_columns) {
+    $users_columns['validator'] = __( 'Validator', 'dossier-functions' );
+    return $users_columns;
+}
+add_filter( 'wpmu_users_columns', 'dossier_ms_users_list_add_column' );
+
+/**
+ * Add option to grant validator privileges in wp-admin/network/user-edit.php
+ *
+ * @param $profileuser
+ *
+ * @author Toni Ginard
+ */
+function dossier_add_validator_option_form ( $profileuser ) {
+    $xtec_is_validator = get_user_meta( $profileuser->ID, 'xtec_is_validator' )[0];
+    ?>
+    <table class="form-table">
+    <tr>
+        <th><?php _e( 'Validator', 'dossier-functions' ); ?></th>
+        <td>
+            <fieldset>
+                <legend class="screen-reader-text"></legend>
+                <label class="checkbox" for="is-validator">
+                <input id="is-validator" type="checkbox" name="is_validator" <?php if ( '1' == $xtec_is_validator ) { echo 'checked="checked"' ; } ?> />
+                <?php _e( 'Grant this user validator capabilities', 'dossier-functions' ); ?>
+                </label>
+            </fieldset>
+        </td>
+    </tr>
+    </table>
+    <?php
+}
+add_action( 'edit_user_profile' , 'dossier_add_validator_option_form' );
+
+/**
+ * Save validator flag in wp_usermeta
+ *
+ * @param $user_id
+ *
+ * @author Toni Ginard
+ */
+function dossier_update_validator_flag( $user_id ) {
+    if ( isset( $_POST['is_validator'] ) && ( $_POST['is_validator'] == 'on' )) {
+        update_user_meta( $user_id, 'xtec_is_validator', '1');
+    } else {
+        update_user_meta( $user_id, 'xtec_is_validator', '0');
+    }
+}
+add_action ( 'edit_user_profile_update', 'dossier_update_validator_flag' );
