@@ -390,13 +390,43 @@ function add_validator() {
 }
 add_action( 'init', 'add_validator' );
 
-function dossier_set_as_validator() {
-    $current_user_id = get_current_user_id();
+function dossier_set_as_validator( $user_login, $user ) {
+    $xtec_is_validator = get_user_meta( $user->ID, 'xtec_is_validator' );
 
-    $xtec_is_validator = get_user_meta( $current_user_id, 'xtec_is_validator' )[0];
-
-    // TODO: Complete this function and set actions
+    if ($xtec_is_validator) {
+        if ( ! in_array( 'editor', $user->roles) && ! in_array( 'administrator', $user->roles) || ! is_super_admin() ) {
+            $user->add_role( 'validator' );
+        }
+    }
 }
+add_action( 'wp_login', 'dossier_set_as_validator', 999, 2 );
+
+function dossier_unset_as_validator() {
+    $current_user_id = get_current_user_id();
+    $xtec_is_validator = get_user_meta($current_user_id, 'xtec_is_validator');
+
+    if ( $xtec_is_validator ) {
+        // TODO: Use function get_blogs_of_user() to get the list of blogs, switch to each and remove role
+        $user = get_user_by( 'id', $current_user_id );
+        if (in_array( 'validator', $user->roles )) {
+            $user->remove_role( 'validator' );
+        }
+    }
+}
+add_action( 'wp_logout', 'dossier_unset_as_validator' );
+
+function dossier_switch_blog($new_blog, $prev_blog_id) {
+    $current_user_id = get_current_user_id();
+    $xtec_is_validator = get_user_meta($current_user_id, 'xtec_is_validator');
+
+    if ( $xtec_is_validator ) {
+        $user = get_user_by('id', $current_user_id);
+        if ( ! in_array( 'editor', $user->roles) && ! in_array( 'administrator', $user->roles) || ! is_super_admin() ) {
+            $user->add_role( 'validator' );
+        }
+    }
+}
+add_action( 'switch_blog', 'dossier_switch_blog', 999, 2 );
 
 /**
  * Add column validator in wp-admin/network/users.php
