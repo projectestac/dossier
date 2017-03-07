@@ -238,7 +238,6 @@ function dossier_one_blog_only($active_signup) {
 }
 add_filter('wpmu_active_signup', 'dossier_one_blog_only');
 
-
 /**
  * Class to add a new field to the options | reading page
  *
@@ -284,7 +283,6 @@ class dossier_add_settings_field {
         </fieldset>
         <?php
     }
-
 }
 new dossier_add_settings_field();
 
@@ -381,14 +379,14 @@ function dossier_redirect_login_message() {
  *
  * @author Toni Ginard
  */
-function add_validator() {
+function dossier_add_validator() {
     add_role( 'validator', __( 'Validator', 'dossier-functions' ), array(
         'read' => true,
         'read_private_pages' => true,
         'read_private_posts' => true,
     ) );
 }
-add_action( 'init', 'add_validator' );
+add_action( 'init', 'dossier_add_validator' );
 
 /**
  * If user is validator (global flag) automatically add this role to the user in the blog where they are logging in
@@ -424,7 +422,7 @@ function dossier_switch_blog() {
         }
     }
 }
-add_action( 'switch_blog', 'dossier_switch_blog', 999 );
+add_action( 'switch_blog', 'dossier_switch_blog' );
 
 /**
  * When a user is validator and logs out, remove the role from all the blogs where they have a role assigned
@@ -436,16 +434,25 @@ function dossier_unset_as_validator() {
     $xtec_is_validator = get_user_meta($current_user_id, 'xtec_is_validator');
 
     if ( $xtec_is_validator ) {
-        $user = get_user_by( 'id', $current_user_id );
-        $user_blogs = get_blogs_of_user( $current_user_id );
 
-        // When user logs out, remove their validator role from all the blogs (in case is set)
+        // Remove validator role from all the blogs
+        $user_blogs = get_blogs_of_user( $current_user_id );
+        $blog_id = get_current_blog_id();
         foreach ( $user_blogs as $blog ) {
-            switch_to_blog( $blog->userblog_id );
-            if (in_array( 'validator', $user->roles )) {
-                $user->remove_role( 'validator' );
+            if ( $blog->userblog_id != $blog_id ) {  // Current blog already processed
+                switch_to_blog( $blog->userblog_id );
+                $user = get_user_by( 'id', $current_user_id ); // Must be after the blog switch to reload roles
+                if (in_array( 'validator', $user->roles )) {
+                    $user->remove_role( 'validator' );
+                }
+                restore_current_blog();
             }
-            restore_current_blog();
+        }
+
+        // Remove role in current blog. Must be done after the removal in all the blogs.
+        $user = get_user_by( 'id', $current_user_id );
+        if (in_array( 'validator', $user->roles )) {
+            $user->remove_role( 'validator' );
         }
     }
 }
@@ -464,6 +471,41 @@ function dossier_ms_users_list_add_column ($users_columns) {
     return $users_columns;
 }
 add_filter( 'wpmu_users_columns', 'dossier_ms_users_list_add_column' );
+
+/**
+ * Populate column Validator shown in wp-admin/network/users.php
+ *
+ * @param $void
+ * @param $column_name
+ * @param $user_id
+ *
+ * @author Toni Ginard
+ */
+function dossier_manage_users_custom_column ( $void, $column_name, $user_id ) {
+    $xtec_is_validator = get_user_meta( $user_id, 'xtec_is_validator' );
+    if ( is_array( $xtec_is_validator )) {
+        $xtec_is_validator = reset( $xtec_is_validator );
+    }
+
+    if ( '1' == $xtec_is_validator ) {
+        _e( 'Validator', 'dossier-functions' );
+    }
+}
+add_action( 'manage_users_custom_column', 'dossier_manage_users_custom_column', 10, 3 );
+
+/**
+ * Hide validators to blog admins. Only superadmins can see them in users list
+ *
+ * @param $args
+ * @return mixed
+ */
+function dossier_users_list_table_query_args( $args ) {
+    if ( !is_super_admin() ) {
+        $args['role__not_in'] = 'validator';
+    }
+    return $args;
+}
+add_filter( 'users_list_table_query_args', 'dossier_users_list_table_query_args' );
 
 /**
  * Add option to grant validator privileges in wp-admin/network/user-edit.php
