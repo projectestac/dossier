@@ -390,6 +390,13 @@ function add_validator() {
 }
 add_action( 'init', 'add_validator' );
 
+/**
+ * If user is validator (global flag) automatically add this role to the user in the blog where they are logging in
+ * @param $user_login
+ * @param $user
+ *
+ * @author Toni Ginard
+ */
 function dossier_set_as_validator( $user_login, $user ) {
     $xtec_is_validator = get_user_meta( $user->ID, 'xtec_is_validator' );
 
@@ -401,21 +408,12 @@ function dossier_set_as_validator( $user_login, $user ) {
 }
 add_action( 'wp_login', 'dossier_set_as_validator', 999, 2 );
 
-function dossier_unset_as_validator() {
-    $current_user_id = get_current_user_id();
-    $xtec_is_validator = get_user_meta($current_user_id, 'xtec_is_validator');
-
-    if ( $xtec_is_validator ) {
-        // TODO: Use function get_blogs_of_user() to get the list of blogs, switch to each and remove role
-        $user = get_user_by( 'id', $current_user_id );
-        if (in_array( 'validator', $user->roles )) {
-            $user->remove_role( 'validator' );
-        }
-    }
-}
-add_action( 'wp_logout', 'dossier_unset_as_validator' );
-
-function dossier_switch_blog($new_blog, $prev_blog_id) {
+/**
+ * When a user is validator and visits another blog after logging, add the validator role in the new blog
+ *
+ * @author Toni Ginard
+ */
+function dossier_switch_blog() {
     $current_user_id = get_current_user_id();
     $xtec_is_validator = get_user_meta($current_user_id, 'xtec_is_validator');
 
@@ -426,7 +424,32 @@ function dossier_switch_blog($new_blog, $prev_blog_id) {
         }
     }
 }
-add_action( 'switch_blog', 'dossier_switch_blog', 999, 2 );
+add_action( 'switch_blog', 'dossier_switch_blog', 999 );
+
+/**
+ * When a user is validator and logs out, remove the role from all the blogs where they have a role assigned
+ *
+ * @author Toni Ginard
+ */
+function dossier_unset_as_validator() {
+    $current_user_id = get_current_user_id();
+    $xtec_is_validator = get_user_meta($current_user_id, 'xtec_is_validator');
+
+    if ( $xtec_is_validator ) {
+        $user = get_user_by( 'id', $current_user_id );
+        $user_blogs = get_blogs_of_user( $current_user_id );
+
+        // When user logs out, remove their validator role from all the blogs (in case is set)
+        foreach ( $user_blogs as $blog ) {
+            switch_to_blog( $blog->userblog_id );
+            if (in_array( 'validator', $user->roles )) {
+                $user->remove_role( 'validator' );
+            }
+            restore_current_blog();
+        }
+    }
+}
+add_action( 'wp_logout', 'dossier_unset_as_validator' );
 
 /**
  * Add column validator in wp-admin/network/users.php
@@ -450,7 +473,8 @@ add_filter( 'wpmu_users_columns', 'dossier_ms_users_list_add_column' );
  * @author Toni Ginard
  */
 function dossier_add_validator_option_form ( $profileuser ) {
-    $xtec_is_validator = get_user_meta( $profileuser->ID, 'xtec_is_validator' )[0];
+    $validator = get_user_meta( $profileuser->ID, 'xtec_is_validator' );
+    $xtec_is_validator = ( is_array( $validator )) ? reset( $validator ) : '0';
     ?>
     <table class="form-table">
     <tr>
