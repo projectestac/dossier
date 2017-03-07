@@ -20,21 +20,25 @@ function dossier_duplicate_blog ($blog_id, $user_id, $domain, $path, $site_id, $
  * @param $errors
  *
  * @author Sara Arjona
+ * @author Xavier Nieto
  */
 function dossier_signup_blogform ( $errors ) {
-	// Block blogname and blogtitle to avoid user edit them
-	echo '<script type="text/javascript">
-			document.forms["setupform"]["blogname"].readOnly = true;
-			document.forms["setupform"]["blog_title"].readOnly = true;
-		  </script>';
+
+    // Add styles and js files
+    wp_enqueue_style( 'dossier-style', content_url().'/mu-plugins/assets/styles/dossier-styles.css' );
+    wp_register_script( 'dossier-js', content_url().'/mu-plugins/assets/javascript/dossier-js.js', array('jquery'), '1.1', true );
+    wp_enqueue_script( 'dossier-js' );
 
 	// Show the option to accept the terms of use
     ?>
     <p>
         <label for="terms_of_use">
             <input type="checkbox" name="terms_of_use" id="terms_of_use" class="input" />
-            <?php _e( 'I accept the terms of use', 'dossier-functions' ); ?>
+            <a id="text-terms-of-use" href="#terms-of-use"><?php _e( 'I accept the terms of use', 'dossier-functions' ); ?></a>
         </label>
+        <div id="conditions-terms-of-use">
+            <p><?php echo get_site_option( 'xtec_terms_of_use' ); ?></p>
+        </div>
     </p>
     <?php
 }
@@ -55,7 +59,7 @@ function dossier_signup_another_blog( $blogname = '', $blog_title = '', $errors 
     echo '<h2>' . __( 'Get your PLE blog', 'dossier-functions') . '</h2>';
 
     if ( $errors->get_error_code() == 'terms_of_use' ) {
-        echo '<p>' . __( 'You must accept the terms of use to create the blog' ) . '</p>';
+        echo '<p style="color: red;">' . __( 'You must accept the terms of use to create the blog' ) . '</p>';
     } else {
         printf(__('Welcome %s. By filling out the form below, you can create your PLE blog.'), $current_user->display_name);
     }
@@ -95,9 +99,11 @@ function dossier_signup_another_blog( $blogname = '', $blog_title = '', $errors 
  */
 function dossier_validate_another_blog_signup() {
     global $wpdb, $blogname, $blog_title, $errors, $domain, $path;
-    $current_user = wp_get_current_user();
+
     if ( ! is_user_logged_in() ) {
         die();
+    } else {
+        $user = wp_get_current_user();
     }
 
     $terms = ( isset( $_POST['terms_of_use'] ) && ( $_POST['terms_of_use'] == 'on' )) ? true : false;
@@ -107,24 +113,21 @@ function dossier_validate_another_blog_signup() {
         dossier_signup_another_blog($blogname, $blog_title, $terms_error);
         return false;
     } else {
-        update_user_meta( get_current_user_id(), 'terms_of_use', 'accepted' );
+        update_user_meta( $user->ID, 'terms_of_use', 'accepted' );
     }
 
     $result = validate_blog_form();
 
-    // Extracted values set/overwrite globals.
-    $domain = $result['domain'];
-    $path = $result['path'];
-    $blogname = $result['blogname'];
-    $blog_title = $result['blog_title'];
     $errors = $result['errors'];
-
     if ( $errors->get_error_code() ) {
         dossier_signup_another_blog($blogname, $blog_title, $errors);
         return false;
     }
 
-    $public = (int) $_POST['blog_public'];
+    $blog_title = $user->data->display_name;
+    $blogname = $user->data->user_login;
+    $path = '/' . $user->data->user_login . '/';
+    $public = ( '1' == $_POST['blog_public'] ) ? true : false;
 
     $meta_defaults = array(
         'lang_id' => 1,
@@ -133,17 +136,13 @@ function dossier_validate_another_blog_signup() {
 
     // Handle the language setting for the new site.
     if ( ! empty( $_POST['WPLANG'] ) ) {
-
         $languages = signup_get_available_languages();
-
         if ( in_array( $_POST['WPLANG'], $languages ) ) {
             $language = wp_unslash( sanitize_text_field( $_POST['WPLANG'] ) );
-
             if ( $language ) {
                 $blog_meta_defaults['WPLANG'] = $language;
             }
         }
-
     }
 
     /**
@@ -162,21 +161,18 @@ function dossier_validate_another_blog_signup() {
 
     if ( defined( 'DOSSIER_MASTER_BLOG' ) ) {
         require_once MUCD_COMPLETE_PATH . '/lib/duplicate.php';
-        $blog_title = ( isset( $current_user->user_firstname ) ? $current_user->user_firstname : '' ) . ' '. ( isset( $current_user->user_lastname ) ? $current_user->user_lastname : '' );
-        if ( empty($blog_title) ) { $blog_title = $current_user->display_name; }
 
         // Form Data
-        $path = '/'.$current_user->user_login.'/';
         $data = array(
             'from_site_id'  => DOSSIER_MASTER_BLOG,  // The ID of the master blog to duplicate
-            'domain'        => $current_user->user_login,
+            'domain'        => $domain,
             'newdomain'     => $domain,
             'path'          => $path,
             'title'         => $blog_title,
-            'email'         => $current_user->user_email,
+            'email'         => $user->data->user_email,
             'copy_files'    => 'yes',
             'keep_users'    => 'no',
-            'public'        => true,
+            'public'        => $public,
             'log'           => 'no',
             'log-path'      => '',
             'advanced'      => 'hide-advanced-options',
@@ -200,14 +196,14 @@ function dossier_validate_another_blog_signup() {
         restore_current_blog();
 
     } else {
-        $blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
+        $blog_id = wpmu_create_blog( $domain, $path, $blog_title, $user->ID, $meta, $wpdb->siteid );
 
         if ( is_wp_error( $blog_id ) ) {
             return false;
         }
     }
 
-    confirm_another_blog_signup( $domain, $path, $blog_title, $current_user->user_login, $current_user->user_email, $meta, $blog_id );
+    confirm_another_blog_signup( $domain, $path, $blog_title, $user->data->user_login, $user->data->user_email, $meta, $blog_id );
     die();
 }
 
@@ -244,6 +240,44 @@ function dossier_one_blog_only($active_signup) {
 add_filter('wpmu_active_signup', 'dossier_one_blog_only');
 
 /**
+ * Print field to network settings page
+ *
+ * @author Xavier Nieto
+ */
+function dossier_show_terms_of_use() {
+    ?>
+    <h2><?php _e( 'Terms of use', 'dossier-functions' ); ?></h2>
+    <table class="form-table">
+        <tr>
+            <th scope="row"><label for="terms_of_use"><?php _e( 'Terms of use', 'dossier-functions' ) ?></label></th>
+            <td>
+                <textarea name="terms_of_use" id="terms_of_use" aria-describedby="terms-of-use-desc" rows="10" cols="45" class="large-text">
+                    <?php echo get_site_option( 'xtec_terms_of_use' ); ?>
+                </textarea>
+                <p class="description" id="terms-of-use-desc">
+                    <?php _e( 'Allowed HTML:', 'dossier-functions' ); ?> <em>&lt;strong&gt;</em>, <em>&lt;br&gt;</em>, <em>&lt;h1&gt;</em>,
+                    <em>&lt;h2&gt;</em>, <em>&lt;h3&gt;</em>, <em>&lt;h4&gt;</em>, <em>&lt;h5&gt;</em>, <em>&lt;h6&gt;</em>,
+                </p>
+            </td>
+        </tr>
+    </table>
+    <?php
+};
+add_filter( 'wpmu_options', 'dossier_show_terms_of_use', 10, 0 );
+
+/**
+ * Update field "terms of use" network settings page
+ *
+ * @author Xavier Nieto
+ */
+function dossier_update_terms_of_use() {
+    if ( isset( $_POST['terms_of_use'] ) ) {
+        update_site_option( 'xtec_terms_of_use', stripslashes( $_POST['terms_of_use'] ));
+    }
+}
+add_action( 'update_wpmu_options', 'dossier_update_terms_of_use', 10, 0);
+
+/**
  * Class to add a new field to the options | reading page
  *
  * @author Toni Ginard
@@ -269,8 +303,8 @@ class dossier_add_settings_field {
         $xtec_blog_public = ( false === $xtec_blog_public ) ? 1 : $xtec_blog_public;
 
         ?>
-        <fieldset>
-            <legend class="screen-reader-text"><span><?php _e( 'Privacy' ); ?></span></legend>
+        <p>
+        <label><?php _e( 'Privacy:' ); ?></label>
         <label class="checkbox" for="blog-private-1">
             <input id="blog-private-1" type="radio" name="xtec_blog_public" value="1" <?php if ( '1' == $xtec_blog_public ) { echo 'checked="checked"' ; } ?> />
             <?php _e( 'Visible to everybody (public)', 'dossier-functions' ); ?>
@@ -285,7 +319,7 @@ class dossier_add_settings_field {
             <input id="blog-private-3" type="radio" name="xtec_blog_public" value="3" <?php if ( '3' == $xtec_blog_public ) { echo 'checked="checked"' ; }  ?> />
             <?php _e( 'Visible only to the owner (private)', 'dossier-functions' ); ?>
         </label>
-        </fieldset>
+        </p>
         <?php
     }
 }
@@ -300,9 +334,7 @@ new dossier_add_settings_field();
  * @author Toni Ginard
  */
 function dossier_save_extra_options( $whitelist_options ) {
-
     $whitelist_options['reading'][] = 'xtec_blog_public';
-
     return $whitelist_options;
 }
 add_filter( 'whitelist_options', 'dossier_save_extra_options' );

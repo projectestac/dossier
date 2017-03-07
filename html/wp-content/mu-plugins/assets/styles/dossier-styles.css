@@ -1,0 +1,21 @@
+#text-terms-of-use {
+    text-decoration: underline;
+    color: inherit;
+}
+
+#conditions-terms-of-use {
+    display: none;
+    max-height: 250px;
+    overflow-x: auto;
+    border: 1px solid #cccccc;
+}
+
+#conditions-terms-of-use p {
+    padding: 10px;
+    margin: 0px;
+}
+
+#setupform #blogname,
+#setupform #blog_title {
+    color: #000000;
+}
