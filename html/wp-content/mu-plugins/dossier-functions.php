@@ -240,7 +240,7 @@ function dossier_one_blog_only($active_signup) {
 add_filter('wpmu_active_signup', 'dossier_one_blog_only');
 
 /**
- * Print field to network settings page
+ * Add field to edit terms of use in network settings
  *
  * @author Xavier Nieto
  */
@@ -249,14 +249,15 @@ function dossier_show_terms_of_use() {
     <h2><?php _e( 'Terms of use', 'dossier-functions' ); ?></h2>
     <table class="form-table">
         <tr>
-            <th scope="row"><label for="terms_of_use"><?php _e( 'Terms of use', 'dossier-functions' ) ?></label></th>
+            <th scope="row"><label for="terms_of_use"><?php _e( 'Terms of use', 'dossier-functions' ); ?></label></th>
             <td>
                 <textarea name="terms_of_use" id="terms_of_use" aria-describedby="terms-of-use-desc" rows="10" cols="45" class="large-text">
                     <?php echo get_site_option( 'xtec_terms_of_use' ); ?>
                 </textarea>
                 <p class="description" id="terms-of-use-desc">
-                    <?php _e( 'Allowed HTML:', 'dossier-functions' ); ?> <em>&lt;strong&gt;</em>, <em>&lt;br&gt;</em>, <em>&lt;h1&gt;</em>,
-                    <em>&lt;h2&gt;</em>, <em>&lt;h3&gt;</em>, <em>&lt;h4&gt;</em>, <em>&lt;h5&gt;</em>, <em>&lt;h6&gt;</em>,
+                    <?php _e( 'Allowed HTML:', 'dossier-functions' ); ?> <em>&lt;div&gt;</em>, <em>&lt;span&gt;</em>, <em>&lt;strong&gt;</em>,
+                    <em>&lt;em&gt;</em>, &lt;p&gt;</em>, <em>&lt;a&gt;</em>, <em>&lt;br&gt;</em>,
+                    <em>&lt;h1&gt;</em>, <em>&lt;h2&gt;</em>, <em>&lt;h3&gt;</em>, <em>&lt;h4&gt;</em>, <em>&lt;h5&gt;</em>, <em>&lt;h6&gt;</em>
                 </p>
             </td>
         </tr>
