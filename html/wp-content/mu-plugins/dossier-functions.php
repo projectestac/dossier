@@ -221,17 +221,22 @@ function dossier_validate_another_blog_signup() {
  */
 function dossier_one_blog_only($active_signup) {
     $current_user_id = get_current_user_id();
-    $user_login = get_userdata( $current_user_id )->data->user_login;
-    $blogs = get_blogs_of_user( $current_user_id );
 
-    foreach ( $blogs as $blog ){
-        if ( trim( $blog->path, '/' ) == $user_login ) {
-            $active_signup = 'none';
-            echo '<div id="signup-not-allowec" class="dossier-signup-not-allowed">';
-            _e( 'You already have your personal blog', 'dossier-functions');
-            echo ': <a href="' . $blog->siteurl . '" target="_blank">' . $blog->siteurl . '</a>';
-            echo '</div>';
+    // Check for a logged user
+    if ( $current_user_id > 0 ) {
+        $user_login = get_userdata( $current_user_id )->data->user_login;
+        $blogs = get_blogs_of_user( $current_user_id );
+
+        foreach ( $blogs as $blog ){
+            if ( trim( $blog->path, '/' ) == $user_login ) {
+                $active_signup = 'none';
+                echo '<div id="signup-not-allowec" class="dossier-signup-not-allowed">';
+                _e( 'You already have your personal blog', 'dossier-functions');
+                echo ': <a href="' . $blog->siteurl . '" target="_blank">' . $blog->siteurl . '</a>';
+                echo '</div>';
+            }
         }
+
     }
 
     return $active_signup;
