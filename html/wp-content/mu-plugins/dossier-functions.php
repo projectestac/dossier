@@ -589,3 +589,109 @@ function dossier_update_validator_flag( $user_id ) {
     }
 }
 add_action ( 'edit_user_profile_update', 'dossier_update_validator_flag' );
+
+/**
+ * Class dossier_widget_latest_blogs. Creates the widget that shows the lastest created blogs
+ */
+class dossier_widget_latest_blogs extends WP_Widget {
+
+    public function __construct() {
+        $widget_ops = array(
+            'classname' => 'dossier_latest_blogs',
+            'description' => __( 'Latest created blogs', 'dossier-functions' ),
+        );
+        parent::__construct( 'dossier_widget_latest_blogs', __( 'Latest blogs', 'dossier-functions' ), $widget_ops );
+    }
+
+    /**
+     * Outputs the content of the widget
+     *
+     * @param array $args
+     * @param array $instance
+     *
+     * @author Toni Ginard
+     */
+    public function widget( $args, $instance ) {
+        global $wpdb;
+
+        $before_widget = $args['before_widget'];
+        $after_widget = $args['after_widget'];
+        $before_title = $args['before_title'];
+        $after_title = $args['after_title'];
+        $title = ( ! empty( $instance['title'] )) ? $instance['title'] : __( 'Latest created blogs', 'dossier-functions' );
+        $number_of_blogs = ( ! empty( $instance['number_of_blogs'] )) ? $instance['number_of_blogs'] : 5;
+        $number_of_blogs *= 2; // Some blogs may be private or of restricted access. This is a workaround to reduce the problem.
+
+        echo $before_widget;
+        echo $before_title . $title . $after_title;
+
+        $blogs = $wpdb->get_results("SELECT `blog_id`, `path` FROM `wp_blogs` WHERE `public` = 1  AND `deleted` = 0 ORDER BY `registered` DESC LIMIT $number_of_blogs");
+
+        echo '<ul>';
+
+        $count = 0;
+        $total = $number_of_blogs / 2;
+
+        foreach ( $blogs as $blog ) {
+            if ( $count >= $total ) {
+                continue; // Maximum number of blogs reached!
+            }
+
+            $xtec_blog_public = get_blog_option( $blog->blog_id, 'xtec_blog_public', false);
+
+            if (( false === $xtec_blog_public ) || ( '1' == $xtec_blog_public )) {
+                $url = get_site_url( $blog->blog_id );
+                echo '<li><a href="' . $url . '" target="_blank">' . trim( $blog->path, '/' ) . '</a></li>';
+                $count++;
+            }
+        }
+
+        echo $after_widget;
+    }
+
+    /**
+     * Outputs the options form on admin
+     *
+     * @param array $instance The widget options
+     *
+     * @author Toni Ginard
+     */
+    public function form( $instance ) {
+        $title = ! empty ( $instance['title'] ) ? $instance['title'] : __( 'Latest created blogs', 'dossier-functions' );
+        $number_of_blogs = isset( $instance['number_of_blogs'] ) ? $instance['number_of_blogs'] : 5;
+        ?>
+
+        <p>
+            <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Widget title:', 'dossier-functions' ); ?></label>
+            <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+        </p>
+        <p>
+            <label for="<?php echo esc_attr( $this->get_field_id( 'number_of_blogs' ) ); ?>"><?php _e( 'Maximum number of blogs:', 'dossier-functions' ); ?></label>
+            <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'number_of_blogs' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'number_of_blogs' ) ); ?>" type="text" value="<?php echo esc_attr( $number_of_blogs ); ?>" />
+        </p>
+
+        <?php
+    }
+
+    /**
+     * Processing widget options on save
+     *
+     * @param array $new_instance The new options
+     * @param array $old_instance The previous options
+     * @return array
+     *
+     * @author Toni Ginard
+     */
+    public function update( $new_instance, $old_instance ) {
+        $instance = array();
+        $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+        $instance['number_of_blogs'] = ( ! empty( $new_instance['number_of_blogs'] ) ) ? strip_tags( $new_instance['number_of_blogs'] ) : 5;
+
+        return $instance;
+    }
+}
+
+// Register widget
+add_action( 'widgets_init', function() {
+    register_widget( 'dossier_widget_latest_blogs' );
+} );
