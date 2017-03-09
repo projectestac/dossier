@@ -11,11 +11,15 @@ CONST NUM_ALLOWED_BLOGS_PER_USER = 1;
 
 load_muplugin_textdomain( 'dossier-functions', '/i18n');
 
-function dossier_duplicate_blog ($blog_id, $user_id, $domain, $path, $site_id, $meta) {
-	echo "$blog_id, $user_id, $domain, $path, $site_id, $meta";
+/**
+ * Remove WordPress logo from Toolbar
+ *
+ * @param $wp_admin_bar
+ */
+function remove_wp_logo( $wp_admin_bar ) {
+    $wp_admin_bar->remove_node( 'wp-logo' );
 }
-// TODO: Not used at the moment. Remove if finally it's not necessary;
-//add_action( 'wpmu_new_blog', 'dossier_duplicate_blog', 10,  6);
+add_action( 'admin_bar_menu', 'remove_wp_logo', 999 );
 
 /**
  * Extra form content for signup blog form
