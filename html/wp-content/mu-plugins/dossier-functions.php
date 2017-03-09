@@ -9,6 +9,8 @@ Author: Àrea TAC - Departament d'Ensenyament de Catalunya
 
 CONST NUM_ALLOWED_BLOGS_PER_USER = 1;
 
+load_muplugin_textdomain( 'dossier-functions', '/i18n');
+
 function dossier_duplicate_blog ($blog_id, $user_id, $domain, $path, $site_id, $meta) {
 	echo "$blog_id, $user_id, $domain, $path, $site_id, $meta";
 }
@@ -56,10 +58,10 @@ function dossier_signup_another_blog( $blogname = '', $blog_title = '', $errors 
         $errors = new WP_Error();
     }
 
-    echo '<h2>' . __( 'Get your PLE blog', 'dossier-functions') . '</h2>';
+    echo '<h2>' . __( 'Get your PLE blog', 'dossier-functions' ) . '</h2>';
 
     if ( $errors->get_error_code() == 'terms_of_use' ) {
-        echo '<p style="color: red;">' . __( 'You must accept the terms of use to create the blog' ) . '</p>';
+        echo '<p style="color: red;">' . __( 'You must accept the terms of use to create the blog', 'dossier-functions' ) . '</p>';
     } else {
         printf(__('Welcome %s. By filling out the form below, you can create your PLE blog.'), $current_user->display_name);
     }
