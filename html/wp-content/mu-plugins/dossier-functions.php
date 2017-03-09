@@ -298,7 +298,7 @@ class dossier_add_settings_field {
 
     public function register_fields() {
         register_setting( 'reading', 'extra_blog_description', 'esc_attr' );
-        add_settings_field( 'extra_blog_desc_id', __( 'Privacy' ), array( $this, 'fields_html' ), 'reading' );
+        add_settings_field( 'extra_blog_desc_id', __( 'Privacy', 'dossier-functions' ), array( $this, 'fields_html' ), 'reading' );
     }
 
     /**
@@ -444,9 +444,9 @@ add_action( 'init', 'dossier_add_validator' );
  * @author Toni Ginard
  */
 function dossier_set_as_validator( $user_login, $user ) {
-    $xtec_is_validator = get_user_meta( $user->ID, 'xtec_is_validator' );
+    $xtec_is_validator = get_user_meta( $user->ID, 'xtec_is_validator', true );
 
-    if ($xtec_is_validator) {
+    if ( ! empty( $xtec_is_validator ) && ( '1' == $xtec_is_validator ) ) {
         if ( ! in_array( 'editor', $user->roles) && ! in_array( 'administrator', $user->roles) || ! is_super_admin() ) {
             $user->add_role( 'validator' );
         }
@@ -461,9 +461,9 @@ add_action( 'wp_login', 'dossier_set_as_validator', 999, 2 );
  */
 function dossier_switch_blog() {
     $current_user_id = get_current_user_id();
-    $xtec_is_validator = get_user_meta($current_user_id, 'xtec_is_validator');
+    $xtec_is_validator = get_user_meta( $current_user_id, 'xtec_is_validator', true );
 
-    if ( $xtec_is_validator ) {
+    if ( ! empty( $xtec_is_validator ) && ( '1' == $xtec_is_validator ) ) {
         $user = get_user_by('id', $current_user_id);
         if ( ! in_array( 'editor', $user->roles) && ! in_array( 'administrator', $user->roles) || ! is_super_admin() ) {
             $user->add_role( 'validator' );
@@ -479,9 +479,10 @@ add_action( 'switch_blog', 'dossier_switch_blog' );
  */
 function dossier_unset_as_validator() {
     $current_user_id = get_current_user_id();
-    $xtec_is_validator = get_user_meta($current_user_id, 'xtec_is_validator');
+    $xtec_is_validator = get_user_meta( $current_user_id, 'xtec_is_validator' );
 
-    if ( $xtec_is_validator ) {
+    // If a user have ever been a validator, is convenient to ensure its validator role has been removed to avoid concurrency issues
+    if ( ! empty( $xtec_is_validator )) {
 
         // Remove validator role from all the blogs
         $user_blogs = get_blogs_of_user( $current_user_id );
