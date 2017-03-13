@@ -109,7 +109,16 @@ if ($data instanceof stdClass) :
 				<?php else: ?>
 
 				<li class="no-custom-styles-found">
+					<!-- 
+					// XTEC ************ MODIFICAT - Add support language
+					// 2017.02.07 @xaviernietosanchez
+					-->
+					<?php _e("Click 'Customize' to create a new custom stylesheet.","slideshow-jquery-image-gallery"); ?>
+					<!--
+					// ************ ORIGINAL
 					<?php _e("Click 'Customize' to create a new custom stylesheet."); ?>
+					// ************ FI
+					-->
 				</li>
 
 				<?php endif; ?>

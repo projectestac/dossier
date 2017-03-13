@@ -49,6 +49,19 @@ if ($data instanceof stdClass) :
 								<?php echo $disabled; ?>
 								<?php echo $checked; ?>
 							/>
+
+                            <?php // XTEC ************ AFEGIT - Translate roles in configuration tab
+                            // 2017.02.06 @xaviernietosanchez
+
+                            $TranslateRoles = array('Administrator','Editor','Author','Contributor','Subscriber','Professor');
+
+                            if ( in_array( $name, $TranslateRoles ) ) {
+                                $name = translate_user_role( $name );
+                            } else {
+                                $name = __($name,'bbpress');
+                            }
+                            // ************ FI ?>
+
 							<label for="<?php echo htmlspecialchars($capability . '_' . $roleSlug); ?>"><?php echo $name; ?></label>
 							<br />
 

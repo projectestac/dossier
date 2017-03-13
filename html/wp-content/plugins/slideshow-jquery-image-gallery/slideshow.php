@@ -35,7 +35,15 @@ class SlideshowPluginMain
 		self::autoInclude();
 
 		// Initialize localization on init
+
+		// XTEC ************ MODIFICAT - Load translation file before constructor
+		// 2017.02.07 @xaviernietosanchez
+		add_action('plugins_loaded', array(__CLASS__, 'localize'));
+		// ************ ORIGINAL
+		/*
 		add_action('init', array(__CLASS__, 'localize'));
+		*/
+		// ************ FI
 
 		// Enqueue hooks
 		add_action('wp_enqueue_scripts'   , array(__CLASS__, 'enqueueFrontendScripts'));
