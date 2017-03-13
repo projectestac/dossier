@@ -35,7 +35,6 @@ popd
 mv html dossier_old
 mv dossier_new/src html
 
-
 #Copy files
 copy_to_new .htaccess
 copy_to_new .htaccess-dist
@@ -70,9 +69,9 @@ delete_new testapp.php
 delete_new works.php
 delete_new wp-config-sample.php
 delete_new xtec-style.css
+delete_new wp-content/mu-plugins/xtecblocs-functions.php
 
 #Delete directories
-delete_new testlib
 delete_new wp-content/jw-flv-player
 delete_new wp-content/plugins/google-calendar-events
 delete_new wp-content/plugins/scribd-doc-embedder
