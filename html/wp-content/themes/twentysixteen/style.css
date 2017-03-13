@@ -3951,3 +3951,10 @@ p > video {
 		padding: 0;
 	}
 }
+
+/* XTEC ************ AFEGIT - Customize styles simple calendar */
+/* 2017.03.08 @xaviernietosanchez */
+.widget .simcal-week-day{
+	white-space: nowrap !important;
+}
+/* ************ FI */

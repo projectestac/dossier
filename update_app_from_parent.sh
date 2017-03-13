@@ -43,12 +43,13 @@ copy_to_new wp-config.php
 copy_to_new db-config.php
 copy_to_new wp-config-dist.php
 copy_to_new wp-config-single.php
+copy_to_new wp-signup.php
 copy_to_new wp-content/wp-cache-config.php
+copy_to_new wp-content/mu-plugins/dossier-functions.php
 
 #Copy directories
-copy_to_new_dir wp-content/mu-plugins/dossier-functions.php
 copy_to_new_dir wp-content/mu-plugins/assets/
-copy_to_new_dir /wp-content/mu-plugins/i18n/
+copy_to_new_dir wp-content/mu-plugins/i18n/
 copy_to_new_dir wp-content/uploads
 copy_to_new_dir wp-content/cache
 #copy_to_new_dir wp-content/plugins/link-manager
