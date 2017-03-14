@@ -67,7 +67,7 @@ function dossier_signup_another_blog( $blogname = '', $blog_title = '', $errors 
     if ( $errors->get_error_code() == 'terms_of_use' ) {
         echo '<p style="color: red;">' . __( 'You must accept the terms of use to create the blog', 'dossier-functions' ) . '</p>';
     } else {
-        printf(__('Welcome %s. By filling out the form below, you can create your PLE blog.'), $current_user->display_name);
+        printf( __( 'Welcome %s. By filling out the form below, you can create your PLE blog.', 'dossier-functions' ), $current_user->display_name);
     }
 
     // Fill default information (URL is the username and title is the first name and last name)
