@@ -306,7 +306,6 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (193, 'ossdl_off_exclude', '.php', 'yes'),
 (194, 'ossdl_cname', '', 'yes'),
 (212, '_transient_timeout_dirsize_cache', '1487165652', 'no'),
-(213, '_transient_dirsize_cache', 'a:1:{s:38:"/dades/dossier/html/wp-content/uploads";a:1:{s:4:"size";i:0;}}', 'no'),
 (215, 'new_admin_email', 'xtecadmin@invalid.cat', 'yes'),
 (218, '_transient_is_multi_author', '0', 'yes'),
 (220, '_transient_timeout_feed_ac0b00fe65abe10e0c5b588f3ed8c7ca', '1487286580', 'no');
@@ -566,7 +565,7 @@ INSERT INTO `wp_sitemeta` (`meta_id`, `site_id`, `meta_key`, `meta_value`) VALUE
 (52, 1, 'mucd_copy_files', 'yes'),
 (53, 1, 'mucd_keep_users', 'yes'),
 (54, 1, 'mucd_log', 'no'),
-(55, 1, 'mucd_log_dir', '/dades/blocs/src/dossier/wp-content/plugins/multisite-clone-duplicator/logs/'),
+(55, 1, 'mucd_log_dir', '/dades/dossier/html/wp-content/plugins/multisite-clone-duplicator/logs/'),
 (56, 1, 'mucd_duplicables', 'all'),
 (57, 1, 'recaptcha_options', 'a:14:{s:10:"public_key";s:40:"6LdYmdoSAAAAAJI5whFCwEiXBik7H6CwBMptVJ1O";s:11:"private_key";s:40:"6LdYmdoSAAAAAIgSS-jRH-UB65b1YdWAIwlk-VZk";s:16:"show_in_comments";i:1;s:27:"bypass_for_registered_users";i:1;s:20:"minimum_bypass_level";s:4:"read";s:14:"comments_theme";s:3:"red";s:18:"comments_tab_index";s:1:"5";s:20:"show_in_registration";i:1;s:18:"registration_theme";s:3:"red";s:22:"registration_tab_index";s:2:"30";s:18:"recaptcha_language";s:2:"es";s:16:"xhtml_compliance";i:0;s:17:"no_response_error";s:58:"<strong>ERROR</strong>: Please fill in the reCAPTCHA form.";s:24:"incorrect_response_error";s:62:"<strong>ERROR</strong>: That reCAPTCHA response was incorrect.";}'),
 (60, 1, 'xmm_quota_percentage', '75'),
