@@ -1,4 +1,5 @@
 html/wp-config.php
+html/config-restricted.php
 html/wp-content/wp-cache-config.php
 html/.htaccess
 html/wp-content/blogs.dir

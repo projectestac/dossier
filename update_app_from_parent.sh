@@ -44,6 +44,7 @@ copy_to_new db-config.php
 copy_to_new wp-config-dist.php
 copy_to_new wp-config-single.php
 copy_to_new wp-signup.php
+copy_to_new works.php
 copy_to_new wp-content/wp-cache-config.php
 copy_to_new wp-content/mu-plugins/dossier-functions.php
 
@@ -66,7 +67,6 @@ copy_to_new_dir wp-content/cache
 
 #Delete files
 delete_new AFEGIT_XTEC
-delete_new config-restricted-dist.php
 delete_new login_moodle.php
 delete_new siteoff.html
 delete_new testapp.php
