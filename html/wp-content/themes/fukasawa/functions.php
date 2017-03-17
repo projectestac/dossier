@@ -103,7 +103,9 @@ function fukasawa_sidebar_reg() {
 	));
 }
 
-
+// XTEC ************ ELIMINAT - Hidden widgets fukasawa theme
+// 2017.03.16 @xaviernietosanchez
+/*
 // Add theme widgets
 require_once (get_template_directory() . "/widgets/dribbble-widget.php");  
 require_once (get_template_directory() . "/widgets/flickr-widget.php");  
@@ -118,7 +120,8 @@ require_once (get_template_directory() . "/widgets/video-widget.php");
      unregister_widget('WP_Widget_Recent_Posts');
  }
  add_action('widgets_init', 'fukasawa_unregister_default_widgets', 11);
-
+*/
+// ************ FI
 
 // Check whether the browser supports javascript
 function html_js_class () {
@@ -402,8 +405,13 @@ class fukasawa_Customize {
 	           <?php self::fukasawa_generate_css('.main-menu .current-menu-item:before', 'color', 'accent_color'); ?>
 	           <?php self::fukasawa_generate_css('.main-menu .current_page_item:before', 'color', 'accent_color'); ?>
 	           <?php self::fukasawa_generate_css('.widget-content .textwidget a:hover', 'color', 'accent_color'); ?>
+	           /* XTEC ************ ELIMINAT - Hidden widgets fukasawa theme */
+	           /* 2017.03.16 @xaviernietosanchez */
+	           /*
 	           <?php self::fukasawa_generate_css('.widget_fukasawa_recent_posts a:hover .title', 'color', 'accent_color'); ?>
 	           <?php self::fukasawa_generate_css('.widget_fukasawa_recent_comments a:hover .title', 'color', 'accent_color'); ?>
+	           */
+	           /* ************ FI */
 	           <?php self::fukasawa_generate_css('.widget_archive li a:hover', 'color', 'accent_color'); ?>
 	           <?php self::fukasawa_generate_css('.widget_categories li a:hover', 'color', 'accent_color'); ?>
 	           <?php self::fukasawa_generate_css('.widget_meta li a:hover', 'color', 'accent_color'); ?>
