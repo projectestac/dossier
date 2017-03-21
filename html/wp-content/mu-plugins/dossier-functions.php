@@ -132,7 +132,7 @@ function dossier_validate_another_blog_signup() {
 
     $blog_title = $user->data->display_name;
     $blogname = $user->data->user_login;
-    $path = '/' . $user->data->user_login . '/';
+    $path = PATH_CURRENT_SITE . $user->data->user_login . '/';
     $public = ( '1' == $_POST['blog_public'] ) ? true : false;
 
     $meta_defaults = array(
