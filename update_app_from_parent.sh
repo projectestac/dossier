@@ -70,7 +70,6 @@ delete_new AFEGIT_XTEC
 delete_new login_moodle.php
 delete_new siteoff.html
 delete_new testapp.php
-delete_new works.php
 delete_new wp-config-sample.php
 delete_new xtec-style.css
 delete_new wp-content/mu-plugins/xtecblocs-functions.php
