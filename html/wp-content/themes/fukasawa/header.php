@@ -76,12 +76,21 @@
 				</p>
 			
 			</a>
-			
+
+            <!-- // XTEC ************ ELIMINAT - Removed hardcoded main menu
+            // 2017.03.30 @aginard
+
 			<ul class="main-menu">
-				
+
+            // ************ FI -->
+
 				<?php if ( has_nav_menu( 'primary' ) ) {
 																	
-					wp_nav_menu( array( 
+				    // XTEC ************ ELIMINAT - Removed hardcoded main menu
+                    // 2017.03.30 @aginard
+                    /*
+
+					wp_nav_menu( array(
 					
 						'container' => '', 
 						'items_wrap' => '%3$s',
@@ -95,11 +104,19 @@
 						'title_li' => ''
 					
 					));
-					
+
+                    */
+                    // ************ FI
+
 				} ?>
-				
+
+            <!-- // XTEC ************ ELIMINAT - Removed hardcoded main menu
+            // 2017.03.30 @aginard
+
 			 </ul>
-			 
+
+            // ************ FI -->
+
 			 <div class="widgets">
 			 
 			 	<?php dynamic_sidebar('sidebar'); ?>
@@ -115,7 +132,7 @@
 			 	<?php if ( get_option('xtec_blogtype') == 'epa' ){ ?>
 			 	<p>
 			 		<span class="genericon genericon-info"></span> 
-			 		<a href="http://blocs.xtec.cat/blocs_formacio/dossierepa/sobre-aquest-espai">Sobre aquest espai</a>
+			 		<a href="sobre-aquest-espai">Sobre aquest espai</a>
 			 	</p>
 			 	<br><br>
 			 	<?php } ?>
