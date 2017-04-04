@@ -233,7 +233,7 @@ INSERT INTO `wp_2_options` (`option_id`, `option_name`, `option_value`, `autoloa
 (121, 'widget_tag_cloud', 'a:2:{i:2;a:2:{s:5:"title";s:0:"";s:8:"taxonomy";s:8:"post_tag";}s:12:"_multiwidget";i:1;}', 'yes'),
 (122, 'widget_nav_menu', 'a:1:{s:12:"_multiwidget";i:1;}', 'yes'),
 (123, 'widget_slideshowwidget', 'a:1:{s:12:"_multiwidget";i:1;}', 'yes'),
-(124, 'widget_users_data_widget', 'a:2:{i:2;a:7:{s:9:"image_uri";s:116:"https://dossier-virtual.xtec.cat/dossierepa/wp-content/plugins/xtec-widget-data-users/assets/images/user_default.png";s:4:"name";s:0:"";s:9:"firstname";s:0:"";s:11:"description";s:0:"";s:5:"email";s:15:"usuari@xtec.cat";s:3:"web";s:19:"linkedin.com/usuari";s:7:"twitter";s:7:"twitter";}s:12:"_multiwidget";i:1;}', 'yes'),
+(124, 'widget_users_data_widget', 'a:2:{i:2;a:7:{s:9:"image_uri";s:115:"http://dossier-virtual.xtec.cat/dossierepa/wp-content/plugins/xtec-widget-data-users/assets/images/user_default.png";s:4:"name";s:0:"";s:9:"firstname";s:0:"";s:11:"description";s:0:"";s:5:"email";s:15:"usuari@xtec.cat";s:3:"web";s:19:"linkedin.com/usuari";s:7:"twitter";s:7:"twitter";}s:12:"_multiwidget";i:1;}', 'yes'),
 (125, 'widget_a2a_share_save_widget', 'a:1:{s:12:"_multiwidget";i:1;}', 'yes'),
 (126, 'widget_a2a_follow_widget', 'a:1:{s:12:"_multiwidget";i:1;}', 'yes'),
 (127, 'cron', 'a:3:{i:1491322462;a:1:{s:11:"wp_cache_gc";a:1:{s:32:"40cd750bba9870f18aada2478b24840a";a:2:{s:8:"schedule";b:0;s:4:"args";a:0:{}}}}i:1491396671;a:1:{s:19:"wp_scheduled_delete";a:1:{s:32:"40cd750bba9870f18aada2478b24840a";a:3:{s:8:"schedule";s:5:"daily";s:4:"args";a:0:{}s:8:"interval";i:86400;}}}s:7:"version";i:2;}', 'yes'),
