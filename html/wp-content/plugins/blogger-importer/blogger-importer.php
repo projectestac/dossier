@@ -54,9 +54,17 @@ class Blogger_Importer extends WP_Importer {
 	var $processed_authors = array();
 	var $author_mapping = array();
 
-	function Blogger_Importer() { /* nothing */ }
+// XTEC ************ MODIFICAT - Use of deprecated PHP4 style class constructor is not supported since PHP 7.
+// 2017.11.23 @nacho
+//************ ORIGINAL
 
-	/**
+//	function Blogger_Importer() { /* nothing */ }
+
+//************ FI
+
+    function __construct() { /* nothing */ }
+
+		/**
 	 * Registered callback function for the Blogger Importer
 	 *
 	 * Manages the three separate stages of the XML import process

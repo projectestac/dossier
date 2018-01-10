@@ -406,18 +406,22 @@ JS;
            $comment = get_comment($comment_id);
 
            // todo: removed double quote from list of 'dangerous characters'
-           $com = preg_replace('/([\\/\(\)\+\;\'])/e',
-               '\'%\' . dechex(ord(\'$1\'))',
-               $comment->comment_content);
-               $com = preg_replace('/\\r\\n/m', '\\\n', $com);
+// XTEC ********** MODIFICAT - Tdue php7.0 compativility
+// 2017.12.17 @iabejaro
+            $com = preg_replace_callback(
+                '/([\\/\(\)\+\;\'])',
+                function ($m) {
+                    return '\'%\' . dechex(ord(\'$m[1]\'))';
+                }, $comment->comment_content);
+// *********** FI
+            $com = preg_replace('/\\r\\n/m', '\\\n', $com);
                echo "
-            <script type='text/javascript'>
-            var _recaptcha_wordpress_savedcomment =  '" . $com  ."';
-            _recaptcha_wordpress_savedcomment =
-                unescape(_recaptcha_wordpress_savedcomment);
-            </script>
-            ";
-
+                <script type='text/javascript'>
+                var _recaptcha_wordpress_savedcomment =  '" . $com  ."';
+                _recaptcha_wordpress_savedcomment =
+                    unescape(_recaptcha_wordpress_savedcomment);
+                </script>
+                ";
             wp_delete_comment($comment->comment_ID);
         }
     }

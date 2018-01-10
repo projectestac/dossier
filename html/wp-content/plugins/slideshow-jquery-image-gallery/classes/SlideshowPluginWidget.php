@@ -15,7 +15,15 @@ class SlideshowPluginWidget extends WP_Widget
 	 *
 	 * @since 1.2.0
 	 */
+
+// XTEC ************ MODIFICAT - Use of deprecated PHP4 style class constructor is not supported since PHP 7.
+// 2017.11.23 @nacho
+//************ ORIGINAL
+/*
 	function SlideshowPluginWidget()
+*/
+//************ FI
+	function __construct()
 	{
 		// Settings
 		$options = array(
