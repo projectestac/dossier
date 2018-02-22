@@ -405,6 +405,8 @@ function add_additional_databases($db_id,$wpdb){
 		'host'     => DB_HOST,
 		'user'     => DB_USER,
 		'password' => DB_PASSWORD,
+		'write'    => 1,
+    	'read'     => 1,
 		'name'     => DB_PREFIX.($db_id-1),
 		'dataset'  => 's'.$db_id
 	));
@@ -415,6 +417,8 @@ $wpdb->add_database(array(
 	'host'     => DB_HOST,
 	'user'     => DB_USER,
 	'password' => DB_PASSWORD,
+	'write'    => 1,
+    'read'     => 1,
 	'name'     => DB_PREFIX.'global',
 	'dataset'  => 'global'
 ));

@@ -73,9 +73,9 @@ function xmm_expand_blogid_list($xmm_blogid_list)
 function xmm_get_sites() {
     $selected_sites = array();
 
-    // Deactivate large network restriction, which affects wp_get_sites()
+    // Deactivate large network restriction, which affects get_sites()
     add_filter( 'wp_is_large_network', '__return_false' );
-    $sites = wp_get_sites(array('limit' => XMM_MAX_BLOG_NUMBER)); // 'Limit' is the maximum number of blog to be returned. We want them all :-)
+    $sites = get_sites(array('limit' => XMM_MAX_BLOG_NUMBER)); // 'Limit' is the maximum number of blog to be returned. We want them all :-)
 
     // Make the list of selected sites using both lists
     foreach ($sites as $site) {
